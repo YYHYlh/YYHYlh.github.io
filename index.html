@@ -313,7 +313,7 @@
 <p><code>npm install hexo-deployer-git --save</code></p>
 <h2 id="0x02-GitHub配置"><a href="#0x02-GitHub配置" class="headerlink" title="0x02 GitHub配置"></a>0x02 GitHub配置</h2><h3 id="仓库创建"><a href="#仓库创建" class="headerlink" title="仓库创建"></a>仓库创建</h3><p>建立与你的GitHub账户名对应的仓库，仓库名为<code>Your_name.github.io</code>。</p>
 <p>接着配置你的hexo与该账号关联，在当前目录中的_config.yml中：</p>
-<p><img src="1.png" alt=""></p>
+<p><img src="/img/1.png" alt=""></p>
 <p><code>type</code>: <code>git</code></p>
 <p><code>repo</code>： <code>https://github.com/Your_name/Your_name.github.io.git</code></p>
 <p><code>branch</code>: <code>master</code></p>
@@ -349,7 +349,7 @@
 <p>别忘了在_config.yml里更改<code>theme</code>的值</p>
 <h2 id="0x04-域名绑定"><a href="#0x04-域名绑定" class="headerlink" title="0x04 域名绑定"></a>0x04 域名绑定</h2><p>现在要想访问你的blog的地址是 Your_name.github.io,你可以绑定到你注册过的域名。</p>
 <p>先改一下DNS解析，我是在阿里云买的,直接在阿里云的控制台里,更改我的域名的解析,记录类型是CNAME，就是一个跳转，主机记录是设置你的二级域名，记录值填你原来的博客地址。</p>
-<p><img src="./2.png" alt=""></p>
+<p><img src="/img/2.png" alt=""></p>
 <p>然后在你博客的根目录的<code>Source</code>文件夹下，创建一个<code>CNAME</code>文件，在文件里写下你购买的域名。</p>
 <p>如我是<code>https://blog.yoyolllh.top</code></p>
 <p>然后再 <code>hexo g &amp;&amp; hexo d</code> 重新上传一下就可以通过你的域名访问了。</p>
