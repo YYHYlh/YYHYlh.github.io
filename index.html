@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next pisces use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -81,12 +81,12 @@
 
 <meta name="keywords" content="Hexo, NexT">
 <meta property="og:type" content="website">
-<meta property="og:title" content="LLLH&#39;s Blog">
+<meta property="og:title" content="LLLH">
 <meta property="og:url" content="http://blog.yoyolllh.top/index.html">
-<meta property="og:site_name" content="LLLH&#39;s Blog">
+<meta property="og:site_name" content="LLLH">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LLLH&#39;s Blog">
+<meta name="twitter:title" content="LLLH">
 
 
 
@@ -94,9 +94,9 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Pisces',
     version: '5.1.3',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":true},
     fancybox: true,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
@@ -122,7 +122,7 @@
 
 
 
-  <title>LLLH's Blog</title>
+  <title>LLLH</title>
   
 
 
@@ -140,7 +140,6 @@
   
     
   
-
   <div class="container sidebar-position-left 
   page-home">
     <div class="headband"></div>
@@ -153,12 +152,12 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">LLLH's Blog</span>
+        <span class="site-title">LLLH</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <p class="site-subtitle">恰逢适会</p>
       
   </div>
 
@@ -194,6 +193,16 @@
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
             归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
           </a>
         </li>
       
@@ -235,11 +244,11 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LH">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LLLH's Blog">
+      <meta itemprop="name" content="LLLH">
     </span>
 
     
@@ -301,67 +310,16 @@
       
         
           
-            <h2 id="0x00"><a href="#0x00" class="headerlink" title="0x00"></a>0x00</h2><p>之前是在阿里云上用WordPress搭的一个服务器。由于服务器快到期了，再加上Wordpress一直有爆漏洞,就决定使用静态页面挂在GitHub上搭博客了。使用的是Hexo，比较方便，而且主题也挺好看。用篇文章记录一下，顺便练习一下Markdown。</p>
-<h2 id="0x01-环境准备"><a href="#0x01-环境准备" class="headerlink" title="0x01 环境准备"></a>0x01 环境准备</h2><h3 id="GitHub账号"><a href="#GitHub账号" class="headerlink" title="GitHub账号"></a>GitHub账号</h3><p>注册即可，无需翻墙。</p>
-<h3 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h3><p><a href="http://nodejs.cn/download/" target="_blank" rel="external">Node.js</a> 官网下载安装即可。</p>
-<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><p>安装Xcode时，会自带Git，如果没有就安装下Xcode或者Xcode的工具。</p>
-<h3 id="hexo"><a href="#hexo" class="headerlink" title="hexo"></a>hexo</h3><p>首先创建一个放置博客系统的文件夹，这个文件夹就是你的博客的根目录，进入到文件夹，执行如下命令安装：</p>
-<p><code>sudo npm install -g hexo</code></p>
-<p>接着初始化：</p>
-<p><code>hexo init</code></p>
-<p>还需要安装一个上传博客到GitHub的工具：</p>
-<p><code>npm install hexo-deployer-git --save</code></p>
-<h2 id="0x02-GitHub配置"><a href="#0x02-GitHub配置" class="headerlink" title="0x02 GitHub配置"></a>0x02 GitHub配置</h2><h3 id="仓库创建"><a href="#仓库创建" class="headerlink" title="仓库创建"></a>仓库创建</h3><p>建立与你的GitHub账户名对应的仓库，仓库名为<code>Your_name.github.io</code>。</p>
-<p>接着配置你的hexo与该账号关联，在当前目录中的_config.yml中：</p>
-<p><img src="/img/1.png" alt=""></p>
-<p><code>type</code>: <code>git</code></p>
-<p><code>repo</code>： <code>https://github.com/Your_name/Your_name.github.io.git</code></p>
-<p><code>branch</code>: <code>master</code></p>
-<p>特别要注意的是yml文件中的每个冒号后面需要一个空格。</p>
-<p>然后在命令行中，配置你的GitHub信息：</p>
-<p><code>git config --global user.name &quot;Yourname&quot;</code></p>
-<p><code>git config --global user.email &quot;YourEmail&quot;</code></p>
-<p>然后在命令行中，创建SSH key:</p>
-<p><code>ssh-keygen -t rsa -C &quot;YourEmail&quot;</code></p>
-<p>然后:</p>
-<p><code>cd ~/.ssh</code></p>
-<p><code>cat id_rsa.pub</code></p>
-<p>然后将这个文件的内容复制下来。进入到你的GitHub账号-&gt;Settings-&gt;SSH and GPG keys，点击<code>NewSSH Key</code>，<code>title</code>随便填，<code>key</code>填你刚才复制的东西。然后保存即可。</p>
-<h2 id="0x03-博客配置"><a href="#0x03-博客配置" class="headerlink" title="0x03 博客配置"></a>0x03 博客配置</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><blockquote>
-<ul>
-<li>hexo clean 清除静态文件(有些主题)</li>
-<li>hexo generate 编译静态文件</li>
-<li>hexo deploy 上传到你的GitHub</li>
-<li>hexo server 在本地部署，在浏览器中输入localhost:4000即可预览</li>
-<li>hexo new “文章名” 创建一篇文章，会在博客根目录下的source/_post/下生成一个<code>文章名.md</code>的文件，在这个md里编辑文章即可。</li>
-</ul>
-</blockquote>
-<p>一般上传就使用hexo g &amp;&amp; hexo d 即可</p>
-<h3 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h3><p>都是在 _config.yml里配置：</p>
-<ul>
-<li><code>title</code>: <code>你的博客名字</code></li>
-<li><code>language</code>: <code>zh-CN</code></li>
-<li><code>theme</code>: <code>你要使用的主题，在根目录下的themes里</code></li>
-</ul>
-<h3 id="主题更换"><a href="#主题更换" class="headerlink" title="主题更换"></a>主题更换</h3><p>hexo有很多好看的主题，<a href="https://www.zhihu.com/question/24422335" target="_blank" rel="external">知乎–有哪些好看的hexo主题</a></p>
-<p>选个喜欢的主题，它的GitHub上会有部署的教程。</p>
-<p>基本步骤是，在博客的根目录下的themes目录下，创建你要使用的主题的文件夹，进入文件夹，然后git clone 主题的仓库地址。跟主题相关的配置一般都在该主题的文件夹下的_config.yml里。</p>
-<p>别忘了在_config.yml里更改<code>theme</code>的值</p>
-<h2 id="0x04-域名绑定"><a href="#0x04-域名绑定" class="headerlink" title="0x04 域名绑定"></a>0x04 域名绑定</h2><p>现在要想访问你的blog的地址是 Your_name.github.io,你可以绑定到你注册过的域名。</p>
-<p>先改一下DNS解析，我是在阿里云买的,直接在阿里云的控制台里,更改我的域名的解析,记录类型是CNAME，就是一个跳转，主机记录是设置你的二级域名，记录值填你原来的博客地址。</p>
-<p><img src="/img/2.png" alt=""></p>
-<p>然后在你博客的根目录的<code>Source</code>文件夹下，创建一个<code>CNAME</code>文件，在文件里写下你购买的域名。</p>
-<p>如我是<code>https://blog.yoyolllh.top</code></p>
-<p>然后再 <code>hexo g &amp;&amp; hexo d</code> 重新上传一下就可以通过你的域名访问了。</p>
-<h2 id="0x05-总结"><a href="#0x05-总结" class="headerlink" title="0x05 总结"></a>0x05 总结</h2><p>踩了许多的坑，小小总结一下</p>
-<ul>
-<li>在更换主题时，严格按照主题的README操作。</li>
-<li>绑定域名记得一定要创建<code>CNAME</code>文件，光在GitHub上绑定域名没有用，每次你重新上传时它都会解除绑定。</li>
-<li>使用 <code>hexo g --config source/_data/next.yml</code>重新指定配置文件生成静态文件。</li>
-<li>有些主题配置后仍使用不了，可以试试 <code>hexo clean</code>命令。</li>
-</ul>
-
-          
+          0x00之前是在阿里云上用WordPress搭的一个服务器。由于服务器快到期了，再加上Wordpress一直有爆漏洞,就决定使用静态页面挂在GitHub上搭博客了。使用的是Hexo，比较方便，而且主题也挺好看。用篇文章记录一下，顺便练习一下Markdown。
+0x01 环境准备GitHub账号注册即
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/10/22/hexo部署及配置/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -420,6 +378,8 @@
 
   <aside id="sidebar" class="sidebar">
     
+      <div id="sidebar-dimmer"></div>
+    
     <div class="sidebar-inner">
 
       
@@ -429,6 +389,10 @@
       <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="LH" />
             
               <p class="site-author-name" itemprop="name">LH</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -453,10 +417,10 @@
               
               
               <div class="site-state-item site-state-tags">
-                
+                <a href="/tags/index.html">
                   <span class="site-state-item-count">1</span>
                   <span class="site-state-item-name">标签</span>
-                
+                </a>
               </div>
             
 
@@ -549,6 +513,8 @@
   
 
 
+  
+
 
 
 
@@ -589,6 +555,11 @@
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
   
 
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
 
   
 
@@ -601,6 +572,13 @@
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
 
   
 
@@ -663,5 +641,8 @@
 
   
 
-</body>
+
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+  </body>
 </html>
