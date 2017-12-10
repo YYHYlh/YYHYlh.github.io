@@ -89,12 +89,12 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://blog.yoyolllh.top/img/sql/err.png">
 <meta property="og:image" content="http://blog.yoyolllh.top/img/sql/err1.png">
-<meta property="og:image" content="http://blog.yoyolllh.top/2017/12/09/sqli-lab学习的一些思路/err2.png">
+<meta property="og:image" content="http://blog.yoyolllh.top/img/sql/err2.png">
 <meta property="og:image" content="http://blog.yoyolllh.top/img/sql/two.png">
 <meta property="og:image" content="http://blog.yoyolllh.top/img/sql/user1.png">
 <meta property="og:image" content="http://blog.yoyolllh.top/img/sql/user2.png">
 <meta property="og:image" content="http://blog.yoyolllh.top/img/sql/order1.png">
-<meta property="og:updated_time" content="2017-12-10T09:16:47.614Z">
+<meta property="og:updated_time" content="2017-12-10T09:18:01.854Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="sqli-lab学习心得总结">
 <meta name="twitter:description" content="0x00从sqli-lab入门Mysql注入。总结记录下我学到的知识点。 0x01 注入步骤 查看当前的用户名，数据库和版本号。user(),datebase(),version() 从information_schema中获取数据库、数据表的信息。 拖库或传Shell  0x02 盲注技巧BoolenBased当参数传递正确或错误时页面的返回结果不同时，可以用这种方法。速度比TimeBased快">
@@ -365,7 +365,7 @@
 <p><a href="http://localhost/Less-6/?id=0%22%20or%20updatexml(1,concat(%22:%22,version(),1),1)%20--+" target="_blank" rel="external">http://localhost/Less-6/?id=0%22%20or%20updatexml(1,concat(%22:%22,version(),1),1)%20--+</a></p>
 </blockquote>
 <p>result：</p>
-<p><img src="err2.png"></p>
+<p><img src="/img/sql/err2.png"></p>
 <h2 id="0x05-绕过技巧"><a href="#0x05-绕过技巧" class="headerlink" title="0x05 绕过技巧"></a>0x05 绕过技巧</h2><h3 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h3><p><em>对于那些使用gbk编码的页面，当源码对输入进行加斜杆的转义时,可以使用宽字节注入绕过。</em></p>
 <p>以Less-33举例：</p>
 <p>参数被addslashes函数转义。</p>
