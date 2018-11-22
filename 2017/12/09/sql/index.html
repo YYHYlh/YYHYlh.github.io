@@ -83,30 +83,30 @@
 <meta name="keywords" content="Web安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="sqli-lab:Less29-53记录">
-<meta property="og:url" content="http://blog.yoyolllh.top/2017/12/09/sql/index.html">
+<meta property="og:url" content="https://yyhylh.github.io/2017/12/09/sql/index.html">
 <meta property="og:site_name" content="LLLH&#39;s Blog">
 <meta property="og:description" content="0x00最近开始学习注入，从sqli-lab的题入手。前面1-28是跟着教程做的，学习了注入基本的方法和思路。后面试着自己做一下，同时留下思路和笔记。 Less-29GET受WAF保护单引号注入测试：  结果跳转到了另一个页面,结合登录网站的图片提示，我们知道有waf。看看源码。  看看java_implimentation和whitelist这个两个处理传入参数的函数。  java_implim">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://blog.yoyolllh.top/img/sql/21.png">
-<meta property="og:image" content="http://blog.yoyolllh.top/img/sql/12.png">
-<meta property="og:image" content="http://blog.yoyolllh.top/img/sql/1.png">
-<meta property="og:image" content="http://blog.yoyolllh.top/img/sql/guolv.png">
-<meta property="og:image" content="http://blog.yoyolllh.top/img/sql/error.png">
-<meta property="og:image" content="http://blog.yoyolllh.top/img/sql/error1.png">
-<meta property="og:image" content="http://blog.yoyolllh.top/img/sql/so.png">
-<meta property="og:image" content="http://blog.yoyolllh.top/img/sql/han.png">
-<meta property="og:image" content="http://blog.yoyolllh.top/img/sql/error2.png">
-<meta property="og:image" content="http://blog.yoyolllh.top/img/sql/sou2.png">
-<meta property="og:image" content="http://blog.yoyolllh.top/img/sql/mysql_escape.png">
-<meta property="og:image" content="http://blog.yoyolllh.top/img/sql/stacked.png">
-<meta property="og:image" content="http://blog.yoyolllh.top/img/sql/error3.png">
-<meta property="og:image" content="http://blog.yoyolllh.top/img/sql/escape0.png">
-<meta property="og:image" content="http://blog.yoyolllh.top/img/sql/order.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/sql/21.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/sql/12.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/sql/1.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/sql/guolv.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/sql/error.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/sql/error1.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/sql/so.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/sql/han.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/sql/error2.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/sql/sou2.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/sql/mysql_escape.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/sql/stacked.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/sql/error3.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/sql/escape0.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/sql/order.png">
 <meta property="og:updated_time" content="2017-12-10T02:40:55.595Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="sqli-lab:Less29-53记录">
 <meta name="twitter:description" content="0x00最近开始学习注入，从sqli-lab的题入手。前面1-28是跟着教程做的，学习了注入基本的方法和思路。后面试着自己做一下，同时留下思路和笔记。 Less-29GET受WAF保护单引号注入测试：  结果跳转到了另一个页面,结合登录网站的图片提示，我们知道有waf。看看源码。  看看java_implimentation和whitelist这个两个处理传入参数的函数。  java_implim">
-<meta name="twitter:image" content="http://blog.yoyolllh.top/img/sql/21.png">
+<meta name="twitter:image" content="https://yyhylh.github.io/img/sql/21.png">
 
 
 
@@ -136,7 +136,7 @@
 
 
 
-  <link rel="canonical" href="http://blog.yoyolllh.top/2017/12/09/sql/"/>
+  <link rel="canonical" href="https://yyhylh.github.io/2017/12/09/sql/"/>
 
 
 
@@ -201,7 +201,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -211,7 +211,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -258,7 +258,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.yoyolllh.top/2017/12/09/sql/">
+    <link itemprop="mainEntityOfPage" href="https://yyhylh.github.io/2017/12/09/sql/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LH">
@@ -285,7 +285,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-09T20:01:53+08:00">
                 2017-12-09
@@ -656,10 +656,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -684,7 +684,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">4</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -697,7 +697,7 @@
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
                   <span class="site-state-item-count">2</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 </a>
               </div>
             
