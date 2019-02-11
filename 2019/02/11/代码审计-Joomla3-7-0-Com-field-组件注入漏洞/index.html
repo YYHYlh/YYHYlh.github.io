@@ -87,19 +87,19 @@
 <meta property="og:site_name" content="LLLH">
 <meta property="og:description" content="Joomla!是一套全球知名的内容管理系统。Joomla!是使用PHP语言加上MySQL数据库所开发的软件系统，可以在Linux、 Windows、MacOSX等各种不同的平台上执行。目前是由Open Source Matters（见扩展阅读）这个开放源码组织进行开发与支持，这个组织的成员来自全世界各地，小组成员约有150人，包含了开发者、设计者、系统管理者、文件撰写者，以及超过2万名的参与会员。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://uploader.shimo.im/f/xZDVQkjWz9MlLbqm.png!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/N18RuSGqGlInvl9q.png!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/kqd6GzibnLM9Z01k.png!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/xbg5icyyTI8rquSa.png!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/k9pMvJck7UUllpKn.png!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/gmTLLR9KILEo0D8e.png!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/C1xq4LAqwNcEHnqK.png!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/FhZ54qAy6qcRYNzc.png!thumbnail">
-<meta property="og:updated_time" content="2019-02-11T08:42:29.214Z">
+<meta property="og:image" content="https://yyhylh.github.io/img/joomla/1.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/joomla/2.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/joomla/3.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/joomla/4.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/joomla/5.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/joomla/6.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/joomla/7.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/joomla/8.png">
+<meta property="og:updated_time" content="2019-02-11T09:14:12.648Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="代码审计-Joomla3.7.0_Com_field_组件注入漏洞">
 <meta name="twitter:description" content="Joomla!是一套全球知名的内容管理系统。Joomla!是使用PHP语言加上MySQL数据库所开发的软件系统，可以在Linux、 Windows、MacOSX等各种不同的平台上执行。目前是由Open Source Matters（见扩展阅读）这个开放源码组织进行开发与支持，这个组织的成员来自全世界各地，小组成员约有150人，包含了开发者、设计者、系统管理者、文件撰写者，以及超过2万名的参与会员。">
-<meta name="twitter:image" content="https://uploader.shimo.im/f/xZDVQkjWz9MlLbqm.png!thumbnail">
+<meta name="twitter:image" content="https://yyhylh.github.io/img/joomla/1.png">
 
 
 
@@ -320,11 +320,11 @@
       
         <p>Joomla!是一套全球知名的内容管理系统。Joomla!是使用PHP语言加上MySQL数据库所开发的软件系统，可以在Linux、 Windows、MacOSX等各种不同的平台上执行。目前是由Open Source Matters（见扩展阅读）这个开放源码组织进行开发与支持，这个组织的成员来自全世界各地，小组成员约有150人，包含了开发者、设计者、系统管理者、文件撰写者，以及超过2万名的参与会员。</p>
 <h1 id="漏洞简述"><a href="#漏洞简述" class="headerlink" title="漏洞简述"></a>漏洞简述</h1><p>这个漏洞出现在Joomla3.7.0新增的组件com_field里，这个组件的访问没有做任何身份验证，</p>
-<h1 id="源码结构"><a href="#源码结构" class="headerlink" title="源码结构"></a>源码结构</h1><p>Joomla!源码结构如下图<br><img src="https://uploader.shimo.im/f/xZDVQkjWz9MlLbqm.png!thumbnail" alt="图片"></p>
+<h1 id="源码结构"><a href="#源码结构" class="headerlink" title="源码结构"></a>源码结构</h1><p>Joomla!源码结构如下图<br><img src="/img/joomla/1.png"></p>
 <h1 id="调用流程"><a href="#调用流程" class="headerlink" title="调用流程"></a>调用流程</h1><p>入口函数如下，前面的都是用来宏定义一些参数，最后一行execute转入site.php接着转入helper.php，通过require_once调用传入的组件参数。</p>
-<p><img src="https://uploader.shimo.im/f/N18RuSGqGlInvl9q.png!thumbnail" alt="图片"></p>
+<p><img src="/img/joomla/2.png"></p>
 <p>如下为Joomla的调用栈,可以很清晰的看到Joomla的调用路径。</p>
-<p><img src="https://uploader.shimo.im/f/kqd6GzibnLM9Z01k.png!thumbnail" alt="图片"></p>
+<p><img src="/img/joomla/3.png"></p>
 <p>这个fields.php关键代码如下。分别完成了组件注册，控制器的实例生成，执行命令等功能。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">JLoader::register(&apos;FieldsHelper&apos;, JPATH_ADMINISTRATOR . &apos;/components/com_fields/helpers/fields.php&apos;);</div><div class="line"></div><div class="line">$controller = JControllerLegacy::getInstance(&apos;Fields&apos;);</div><div class="line">$controller-&gt;execute(JFactory::getApplication()-&gt;input-&gt;get(&apos;task&apos;));</div></pre></td></tr></table></figure>
 <p>$controller-&gt;redirect();</p>
@@ -336,19 +336,19 @@
 </code></pre><p>display函数调用组件的model文件，接着它调用了libraries\legacy\model\list.php中的populateState方法，在处理参数fulloredering时，没有太多严格的过滤，接着就直接使用了setstate方法把用户输入保存了下来。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">case &apos;fullordering&apos;:</div><div class="line">    $orderingParts = explode(&apos; &apos;, $value);</div><div class="line"></div><div class="line">    if (count($orderingParts) &gt;= 2)</div><div class="line">    &#123;</div><div class="line">        ...</div><div class="line">    &#125;</div><div class="line">    else</div><div class="line">    &#123;</div><div class="line">        $this-&gt;setState(&apos;list.ordering&apos;, $ordering);</div><div class="line">        $this-&gt;setState(&apos;list.direction&apos;, $direction);</div><div class="line">    &#125;</div><div class="line">    break;</div><div class="line">    ...</div><div class="line">$value = $app-&gt;getUserStateFromRequest($this-&gt;context . &apos;.limitstart&apos;, &apos;limitstart&apos;, 0, &apos;int&apos;);</div><div class="line">$limitstart = ($limit != 0 ? (floor($value / $limit) * $limit) : 0);</div><div class="line">$this-&gt;setState(&apos;list.start&apos;, $limitstart);</div></pre></td></tr></table></figure>
 <p>保存下来的用户输入如下。</p>
-<p><img src="https://uploader.shimo.im/f/xbg5icyyTI8rquSa.png!thumbnail" alt="图片"></p>
+<p><img src="/img/joomla/4.png"></p>
 <p>整个调用栈如下</p>
-<p><img src="https://uploader.shimo.im/f/k9pMvJck7UUllpKn.png!thumbnail" alt="图片"></p>
+<p><img src="/img/joomla/5.png"></p>
 <p>其中调用getUserStateFromRequest方法处理用户的输入，接着它调用了getUserState方法进行处理，注册session,生成list.fullordering的值。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public function getUserState($key, $default = null)</div><div class="line">&#123;</div><div class="line">    $session = JFactory::getSession();</div><div class="line">    $registry = $session-&gt;get(&apos;registry&apos;);</div><div class="line">    if (!is_null($registry))</div><div class="line">    &#123;</div><div class="line">        return $registry-&gt;get($key, $default);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return $default;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>接着在display函数里的$this-&gt;get(‘Items’)方法中，通过getstate方法将list.fullordering的值，在逃脱了escape方法过滤的情况下，拼接进了sql语句中，并在之后得到执行并回显</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// Add the list ordering clause</div><div class="line">$listOrdering = $this-&gt;getState(&apos;list.fullordering&apos;, &apos;a.ordering&apos;);</div><div class="line">$orderDirn    = &apos;&apos;;</div><div class="line"></div><div class="line">if (empty($listOrdering))</div><div class="line">&#123;</div><div class="line">    $listOrdering  = $this-&gt;state-&gt;get(&apos;list.ordering&apos;, &apos;a.ordering&apos;);</div><div class="line">    $orderDirn     = $this-&gt;state-&gt;get(&apos;list.direction&apos;, &apos;DESC&apos;);</div><div class="line">&#125;</div><div class="line">    </div><div class="line">$query-&gt;order($db-&gt;escape($listOrdering) . &apos; &apos; . $db-&gt;escape($orderDirn));  </div><div class="line"></div><div class="line">return $query;</div></pre></td></tr></table></figure>
 <p>执行结果如下</p>
-<p><img src="https://uploader.shimo.im/f/gmTLLR9KILEo0D8e.png!thumbnail" alt="图片"></p>
+<p><img src="/img/joomla/6.png"></p>
 <p>流程图如下</p>
-<p><img src="https://uploader.shimo.im/f/C1xq4LAqwNcEHnqK.png!thumbnail" alt="图片"></p>
+<p><img src="/img/joomla/7.png"></p>
 <h1 id="修复方法"><a href="#修复方法" class="headerlink" title="修复方法"></a>修复方法</h1><p>官方给出的修复如下</p>
-<p><img src="https://uploader.shimo.im/f/FhZ54qAy6qcRYNzc.png!thumbnail" alt="图片"></p>
+<p><img src="/img/joomla/8.png"></p>
 <p>在第三步拼接sql时，在administrator/components/com_fields/models/fields.php里不再使用用户可控的fullordering参数，而是直接拼接ordering参数，而这个参数在输入时会进行白名单检测，无法形成注入，因此可以成功防御此漏洞。</p>
 
       
