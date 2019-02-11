@@ -95,7 +95,7 @@
 <meta property="og:image" content="https://yyhylh.github.io/img/joomla/6.png">
 <meta property="og:image" content="https://yyhylh.github.io/img/joomla/7.png">
 <meta property="og:image" content="https://yyhylh.github.io/img/joomla/8.png">
-<meta property="og:updated_time" content="2019-02-11T09:16:35.339Z">
+<meta property="og:updated_time" content="2019-02-11T09:50:19.595Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="代码审计-Joomla3.7.0_Com_field_组件注入漏洞">
 <meta name="twitter:description" content="Joomla!是一套全球知名的内容管理系统。Joomla!是使用PHP语言加上MySQL数据库所开发的软件系统，可以在Linux、 Windows、MacOSX等各种不同的平台上执行。目前是由Open Source Matters（见扩展阅读）这个开放源码组织进行开发与支持，这个组织的成员来自全世界各地，小组成员约有150人，包含了开发者、设计者、系统管理者、文件撰写者，以及超过2万名的参与会员。">
@@ -319,7 +319,7 @@
 
       
         <p>Joomla!是一套全球知名的内容管理系统。Joomla!是使用PHP语言加上MySQL数据库所开发的软件系统，可以在Linux、 Windows、MacOSX等各种不同的平台上执行。目前是由Open Source Matters（见扩展阅读）这个开放源码组织进行开发与支持，这个组织的成员来自全世界各地，小组成员约有150人，包含了开发者、设计者、系统管理者、文件撰写者，以及超过2万名的参与会员。</p>
-<h1 id="漏洞简述"><a href="#漏洞简述" class="headerlink" title="漏洞简述"></a>漏洞简述</h1><p>这个漏洞出现在Joomla3.7.0新增的组件com_field里，这个组件的访问没有做任何身份验证，</p>
+<h1 id="漏洞简述"><a href="#漏洞简述" class="headerlink" title="漏洞简述"></a>漏洞简述</h1><p>这个漏洞出现在Joomla3.7.0新增的组件com_field里，这个组件的访问没有做任何身份验证，并且在处理fullordering参数时没有合格的过滤，导致最终将用户的输入拼接在了sql查询语句的order by参数里，形成注入。</p>
 <h1 id="源码结构"><a href="#源码结构" class="headerlink" title="源码结构"></a>源码结构</h1><p>Joomla!源码结构如下图<br><img src="/img/joomla/1.png"></p>
 <h1 id="调用流程"><a href="#调用流程" class="headerlink" title="调用流程"></a>调用流程</h1><p>入口函数如下，前面的都是用来宏定义一些参数，最后一行execute转入site.php接着转入helper.php，通过require_once调用传入的组件参数。</p>
 <p><img src="/img/joomla/2.png"></p>
