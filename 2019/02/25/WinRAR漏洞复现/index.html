@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="漏洞复现," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="【漏洞详情】 这是一个存在于WinRAR上的漏洞，用它来可以获得受害者计算机的控制。攻击者只需利用此漏洞构造恶意的压缩文件，当受害者使用WinRAR解压该恶意文件时便会触发漏洞。该漏洞是由于WinRAR所使用的一个陈旧的动态链接库UNACEV2.dll所造成的，没有任何的基础保护机制(ASLR,DEP等)。动态链接库的作用是处理ACE格式文件。而WinRAR解压ACE文件时，由于没有对文件名进行充">
+<meta name="keywords" content="漏洞复现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WinRAR漏洞复现">
+<meta property="og:url" content="https://yyhylh.github.io/2019/02/25/WinRAR漏洞复现/index.html">
+<meta property="og:site_name" content="LLLH">
+<meta property="og:description" content="【漏洞详情】 这是一个存在于WinRAR上的漏洞，用它来可以获得受害者计算机的控制。攻击者只需利用此漏洞构造恶意的压缩文件，当受害者使用WinRAR解压该恶意文件时便会触发漏洞。该漏洞是由于WinRAR所使用的一个陈旧的动态链接库UNACEV2.dll所造成的，没有任何的基础保护机制(ASLR,DEP等)。动态链接库的作用是处理ACE格式文件。而WinRAR解压ACE文件时，由于没有对文件名进行充">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://yyhylh.github.io/img/winrar/1.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/winrar/2.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/winrar/3.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/winrar/4.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/winrar/5.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/winrar/6.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/winrar/7.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/winrar/8.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/winrar/9.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/winrar/10.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/winrar/11.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/winrar/12.png">
+<meta property="og:image" content="https://yyhylh.github.io/img/winrar/13.png">
+<meta property="og:updated_time" content="2019-02-25T07:01:48.089Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="WinRAR漏洞复现">
+<meta name="twitter:description" content="【漏洞详情】 这是一个存在于WinRAR上的漏洞，用它来可以获得受害者计算机的控制。攻击者只需利用此漏洞构造恶意的压缩文件，当受害者使用WinRAR解压该恶意文件时便会触发漏洞。该漏洞是由于WinRAR所使用的一个陈旧的动态链接库UNACEV2.dll所造成的，没有任何的基础保护机制(ASLR,DEP等)。动态链接库的作用是处理ACE格式文件。而WinRAR解压ACE文件时，由于没有对文件名进行充">
+<meta name="twitter:image" content="https://yyhylh.github.io/img/winrar/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://yyhylh.github.io/2019/02/25/WinRAR漏洞复现/"/>
+
+
+
+
+
+  <title>WinRAR漏洞复现 | LLLH</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LLLH</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">恰逢适会</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yyhylh.github.io/2019/02/25/WinRAR漏洞复现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LLLH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">WinRAR漏洞复现</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-25T14:50:03+08:00">
+                2019-02-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="【漏洞详情】"><a href="#【漏洞详情】" class="headerlink" title="【漏洞详情】"></a>【漏洞详情】</h2><ul>
+<li>这是一个存在于WinRAR上的漏洞，用它来可以获得受害者计算机的控制。攻击者只需利用此漏洞构造恶意的压缩文件，当受害者使用WinRAR解压该恶意文件时便会触发漏洞。该漏洞是由于WinRAR所使用的一个陈旧的动态链接库UNACEV2.dll所造成的，没有任何的基础保护机制(ASLR,DEP等)。动态链接库的作用是处理ACE格式文件。而WinRAR解压ACE文件时，由于没有对文件名进行充分过滤，导致其可实现目录穿越，将恶意文件写入任意目录,甚至可以写入文件至开机启动项，导致代码执行。</li>
+</ul>
+<h2 id="【验证工具】"><a href="#【验证工具】" class="headerlink" title="【验证工具】"></a>【验证工具】</h2><ul>
+<li><p>1.WinACE</p>
+</li>
+<li><p>2.WinRAR 5.6</p>
+</li>
+<li><p>3.Hex Editor Neo</p>
+</li>
+<li><p>4.Acefile.py</p>
+</li>
+</ul>
+<h2 id="【影响版本】"><a href="#【影响版本】" class="headerlink" title="【影响版本】"></a>【影响版本】</h2><p>影响版本：</p>
+<blockquote>
+<p>WinRAR &lt; 5.70 Beta 1</p>
+<p>Bandizip    &lt; = 6.2.0.0</p>
+<p>好压(2345压缩)    &lt; = 5.9.8.10907</p>
+<p>360压缩    &lt; = 4.0.0.1170</p>
+</blockquote>
+<h2 id="【验证详情】"><a href="#【验证详情】" class="headerlink" title="【验证详情】"></a>【验证详情】</h2><ul>
+<li><h3 id="验证条件"><a href="#验证条件" class="headerlink" title="验证条件"></a>验证条件</h3></li>
+<li><h3 id="验证过程"><a href="#验证过程" class="headerlink" title="验证过程"></a>验证过程</h3></li>
+<li><p>首先在桌面上创建一个普通的txt文件。</p>
+<p>  <img src="/img/winrar/1.png" alt=""></p>
+</li>
+<li><p>下载安装WinACE进行压缩,这里选中store full path以保存完整路径。</p>
+<p>  <img src="/img/winrar/2.png" alt=""></p>
+</li>
+<li><p>使用acefile脚本查看ace文件的header信息，脚本地址为<code>https://github.com/droe/acefile/blob/master/acefile.py</code>。执行命令<code>python3 poc.py --headers  /Volumes/\[C\]\ Windows\ 7/Users/lllh/Desktop/test.ace</code>。</p>
+</li>
+</ul>
+<p><img src="/img/winrar/3.png" alt=""></p>
+<ul>
+<li>使用16进制编辑器打开该ace文件。下面结合acefile.py给出的header信息理解ace文件各部分内容的含义。<br>下面第一个圈对应的是hdr_crc也就是一个校验和，值为0x85e1；第二个圈是hdr_size，也就是从hdr_size到文件内容前这一段的长度，值为0x003a；第三个圈是filename的长度，值为0x001b；第四部分是filename。</li>
+</ul>
+<p><img src="/img/winrar/4.png" alt=""></p>
+<ul>
+<li><p>该漏洞的利用思路是通过修改文件名，形成目录穿越漏洞，将恶意文件写入任意目录，因此这里目标是修改filename段。修改完filename，需要再依次向前修改文件头，使得文件可用。</p>
+</li>
+<li><p>首先把filename修改为c:\c:\test.txt。该filename长度为14，即16进制的0x0e，因此修改文件中的filename长度字段为<code>0e 00</code>。</p>
+</li>
+</ul>
+<p><img src="/img/winrar/5.png" alt=""></p>
+<ul>
+<li>然后修改hdr_size，为下图中选中部分，长度是45，即16进制的0x2d。修改下图圈中字段为<code>2d 00</code>。</li>
+</ul>
+<p><img src="/img/winrar/6.png" alt=""></p>
+<ul>
+<li>下一步修改hdr_crc。首先通过之前的脚本，查看该文件现在正确的hdr_crc值。直接执行该脚本，会报错。</li>
+</ul>
+<p><img src="/img/winrar/7.png" alt=""></p>
+<ul>
+<li>在源代码里定位<code>header CRC failed</code>。</li>
+</ul>
+<p><img src="/img/winrar/8.png" alt=""></p>
+<ul>
+<li>这里ace_crc16(buf)的值就是ace文件hdr_cr对应的值，直接打印出该值并将该位置的值修改即可。</li>
+</ul>
+<p><img src="/img/winrar/9.png" alt=""></p>
+<ul>
+<li>对应的值为2227，即16进制的0x08b3。修改文件中对应的值为<code>b3 08</code>。</li>
+</ul>
+<p><img src="/img/winrar/10.png" alt=""></p>
+<ul>
+<li>最终的文件内容为</li>
+</ul>
+<p><img src="/img/winrar/11.png" alt=""></p>
+<ul>
+<li>再次执行脚本，可以正常解析，并看到filename已经修改成功。</li>
+</ul>
+<p><img src="/img/winrar/12.png" alt=""></p>
+<ul>
+<li>由于我将文件穿越路径设为C盘根目录，这个目录需要管理员权限才能写入，因此需要以管理员身份打开WinRAR，然后解压缩此ace文件到任意目录，可以在C盘根目录下看到生成了test.txt。漏洞复现完成。</li>
+</ul>
+<p><img src="/img/winrar/13.png" alt=""></p>
+<h2 id="漏洞修复"><a href="#漏洞修复" class="headerlink" title="漏洞修复"></a>漏洞修复</h2><ul>
+<li><ol>
+<li>WinRAR升级到5.70 Beta 1</li>
+</ol>
+</li>
+<li><ol>
+<li>删除UNACEV2.dll文件</li>
+</ol>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/漏洞复现/" rel="tag"># 漏洞复现</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/21/Matrix靶机实战演练/" rel="next" title="Matrix靶机实战演练">
+                <i class="fa fa-chevron-left"></i> Matrix靶机实战演练
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="LH" />
+            
+              <p class="site-author-name" itemprop="name">LH</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#【漏洞详情】"><span class="nav-number">1.</span> <span class="nav-text">【漏洞详情】</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#【验证工具】"><span class="nav-number">2.</span> <span class="nav-text">【验证工具】</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#【影响版本】"><span class="nav-number">3.</span> <span class="nav-text">【影响版本】</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#【验证详情】"><span class="nav-number">4.</span> <span class="nav-text">【验证详情】</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#验证条件"><span class="nav-number">4.1.</span> <span class="nav-text">验证条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证过程"><span class="nav-number">4.2.</span> <span class="nav-text">验证过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#漏洞修复"><span class="nav-number">5.</span> <span class="nav-text">漏洞修复</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LH</span>
+
+  
+</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+  </body>
+</html>
