@@ -100,7 +100,7 @@
 <meta property="og:image" content="https://yyhylh.github.io/img/winrar/11.png">
 <meta property="og:image" content="https://yyhylh.github.io/img/winrar/12.png">
 <meta property="og:image" content="https://yyhylh.github.io/img/winrar/13.png">
-<meta property="og:updated_time" content="2019-02-25T07:01:48.089Z">
+<meta property="og:updated_time" content="2019-02-25T07:04:24.860Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WinRAR漏洞复现">
 <meta name="twitter:description" content="【漏洞详情】 这是一个存在于WinRAR上的漏洞，用它来可以获得受害者计算机的控制。攻击者只需利用此漏洞构造恶意的压缩文件，当受害者使用WinRAR解压该恶意文件时便会触发漏洞。该漏洞是由于WinRAR所使用的一个陈旧的动态链接库UNACEV2.dll所造成的，没有任何的基础保护机制(ASLR,DEP等)。动态链接库的作用是处理ACE格式文件。而WinRAR解压ACE文件时，由于没有对文件名进行充">
@@ -326,16 +326,12 @@
         <h2 id="【漏洞详情】"><a href="#【漏洞详情】" class="headerlink" title="【漏洞详情】"></a>【漏洞详情】</h2><ul>
 <li>这是一个存在于WinRAR上的漏洞，用它来可以获得受害者计算机的控制。攻击者只需利用此漏洞构造恶意的压缩文件，当受害者使用WinRAR解压该恶意文件时便会触发漏洞。该漏洞是由于WinRAR所使用的一个陈旧的动态链接库UNACEV2.dll所造成的，没有任何的基础保护机制(ASLR,DEP等)。动态链接库的作用是处理ACE格式文件。而WinRAR解压ACE文件时，由于没有对文件名进行充分过滤，导致其可实现目录穿越，将恶意文件写入任意目录,甚至可以写入文件至开机启动项，导致代码执行。</li>
 </ul>
-<h2 id="【验证工具】"><a href="#【验证工具】" class="headerlink" title="【验证工具】"></a>【验证工具】</h2><ul>
-<li><p>1.WinACE</p>
-</li>
-<li><p>2.WinRAR 5.6</p>
-</li>
-<li><p>3.Hex Editor Neo</p>
-</li>
-<li><p>4.Acefile.py</p>
-</li>
-</ul>
+<h2 id="【验证工具】"><a href="#【验证工具】" class="headerlink" title="【验证工具】"></a>【验证工具】</h2><blockquote>
+<p>WinACE</p>
+<p>WinRAR 5.6</p>
+<p>Hex Editor Neo</p>
+<p>Acefile.py</p>
+</blockquote>
 <h2 id="【影响版本】"><a href="#【影响版本】" class="headerlink" title="【影响版本】"></a>【影响版本】</h2><p>影响版本：</p>
 <blockquote>
 <p>WinRAR &lt; 5.70 Beta 1</p>
@@ -399,16 +395,10 @@
 <li>由于我将文件穿越路径设为C盘根目录，这个目录需要管理员权限才能写入，因此需要以管理员身份打开WinRAR，然后解压缩此ace文件到任意目录，可以在C盘根目录下看到生成了test.txt。漏洞复现完成。</li>
 </ul>
 <p><img src="/img/winrar/13.png" alt=""></p>
-<h2 id="漏洞修复"><a href="#漏洞修复" class="headerlink" title="漏洞修复"></a>漏洞修复</h2><ul>
-<li><ol>
-<li>WinRAR升级到5.70 Beta 1</li>
-</ol>
-</li>
-<li><ol>
-<li>删除UNACEV2.dll文件</li>
-</ol>
-</li>
-</ul>
+<h2 id="漏洞修复"><a href="#漏洞修复" class="headerlink" title="漏洞修复"></a>漏洞修复</h2><blockquote>
+<p>WinRAR升级到5.70 Beta 1</p>
+<p>删除UNACEV2.dll文件</p>
+</blockquote>
 
       
     </div>
