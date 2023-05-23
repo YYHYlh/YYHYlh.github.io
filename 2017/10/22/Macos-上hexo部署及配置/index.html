@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang=zh-CN>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="website">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Macos 上hexo部署及配置 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/aircloud.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_28hi1hpxx24.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+
+    
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 常记常新 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>LH</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/collect/">
+                    <i class="iconfont icon-shoucang1"></i>
+                    <span>收藏</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Macos-%E4%B8%8Ahexo%E9%83%A8%E7%BD%B2%E5%8F%8A%E9%85%8D%E7%BD%AE"><span class="toc-text">Macos 上hexo部署及配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00"><span class="toc-text">0x00</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-text">0x01 环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#GitHub%E8%B4%A6%E5%8F%B7"><span class="toc-text">GitHub账号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Node-js"><span class="toc-text">Node.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Git"><span class="toc-text">Git</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hexo"><span class="toc-text">hexo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-GitHub%E9%85%8D%E7%BD%AE"><span class="toc-text">0x02 GitHub配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%93%E5%BA%93%E5%88%9B%E5%BB%BA"><span class="toc-text">仓库创建</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-%E5%8D%9A%E5%AE%A2%E9%85%8D%E7%BD%AE"><span class="toc-text">0x03 博客配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-text">基本操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="toc-text">基本配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%8D%A2"><span class="toc-text">主题更换</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-%E5%9F%9F%E5%90%8D%E7%BB%91%E5%AE%9A"><span class="toc-text">0x04 域名绑定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-%E6%80%BB%E7%BB%93"><span class="toc-text">0x05 总结</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-bg" id="search-bg"></div>
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 常记常新 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Macos 上hexo部署及配置
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2017-10-22 07:28:02</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#blog" title="blog">blog</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h1 id="Macos-上hexo部署及配置"><a href="#Macos-上hexo部署及配置" class="headerlink" title="Macos 上hexo部署及配置"></a>Macos 上hexo部署及配置</h1><h2 id="0x00"><a href="#0x00" class="headerlink" title="0x00"></a>0x00</h2><p>之前是在阿里云上用WordPress搭的一个服务器。由于服务器快到期了，再加上Wordpress一直有爆漏洞,就决定使用静态页面挂在GitHub上搭博客了。使用的是Hexo，比较方便，而且主题也挺好看。用篇文章记录一下，顺便练习一下Markdown。</p>
+<h2 id="0x01-环境准备"><a href="#0x01-环境准备" class="headerlink" title="0x01 环境准备"></a>0x01 环境准备</h2><h3 id="GitHub账号"><a href="#GitHub账号" class="headerlink" title="GitHub账号"></a>GitHub账号</h3><p>注册即可，无需翻墙。</p>
+<h3 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h3><p><a target="_blank" rel="noopener" href="http://nodejs.cn/download/" title="Node.js">Node.js</a> 官网下载安装即可。</p>
+<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><p>安装Xcode时，会自带Git，如果没有就安装下Xcode或者Xcode的工具。</p>
+<h3 id="hexo"><a href="#hexo" class="headerlink" title="hexo"></a>hexo</h3><p>首先创建一个放置博客系统的文件夹，这个文件夹就是你的博客的根目录，进入到文件夹，执行如下命令安装：</p>
+<p><code>sudo npm install -g hexo</code></p>
+<p>接着初始化：</p>
+<p><code>hexo init</code></p>
+<p>还需要安装一个上传博客到GitHub的工具：</p>
+<p><code>npm install hexo-deployer-git --save</code></p>
+<h2 id="0x02-GitHub配置"><a href="#0x02-GitHub配置" class="headerlink" title="0x02 GitHub配置"></a>0x02 GitHub配置</h2><h3 id="仓库创建"><a href="#仓库创建" class="headerlink" title="仓库创建"></a>仓库创建</h3><p>建立与你的GitHub账户名对应的仓库，仓库名为<code>Your_name.github.io</code>。</p>
+<p>接着配置你的hexo与该账号关联，在当前目录中的_config.yml中：</p>
+<p><img src="/img/hexoblog/1.png"></p>
+<p><code>type</code>: <code>git</code></p>
+<p><code>repo</code>： <code>https://github.com/Your_name/Your_name.github.io.git</code></p>
+<p><code>branch</code>: <code>master</code></p>
+<p>特别要注意的是yml文件中的每个冒号后面需要一个空格。</p>
+<p>然后在命令行中，配置你的GitHub信息：</p>
+<p><code>git config --global user.name &quot;Yourname&quot;</code></p>
+<p><code>git config --global user.email &quot;YourEmail&quot;</code></p>
+<p>然后在命令行中，创建SSH key:</p>
+<p><code>ssh-keygen -t rsa -C &quot;YourEmail&quot;</code></p>
+<p>然后:</p>
+<p><code>cd ~/.ssh</code></p>
+<p><code>cat id_rsa.pub</code></p>
+<p>然后将这个文件的内容复制下来。进入到你的GitHub账号-&gt;Settings-&gt;SSH and GPG keys，点击<code>NewSSH Key</code>，<code>title</code>随便填，<code>key</code>填你刚才复制的东西。然后保存即可。</p>
+<h2 id="0x03-博客配置"><a href="#0x03-博客配置" class="headerlink" title="0x03 博客配置"></a>0x03 博客配置</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
+<li>hexo clean 清除静态文件(有些主题)<br>*   hexo generate 编译静态文件<br>*   hexo deploy 上传到你的GitHub<br>*   hexo server 在本地部署，在浏览器中输入localhost:4000即可预览<br>*   hexo new “文章名” 创建一篇文章，会在博客根目录下的source&#x2F;_post&#x2F;下生成一个<code>文章名.md</code>的文件，在这个md里编辑文章即可。</li>
+</ul>
+<p>一般上传就使用hexo g &amp;&amp; hexo d 即可</p>
+<h3 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h3><p>都是在 _config.yml里配置：</p>
+<ul>
+<li><code>title</code>: <code>你的博客名字</code></li>
+<li><code>language</code>: <code>zh-CN</code></li>
+<li><code>theme</code>: <code>你要使用的主题，在根目录下的themes里</code></li>
+</ul>
+<h3 id="主题更换"><a href="#主题更换" class="headerlink" title="主题更换"></a>主题更换</h3><p>hexo有很多好看的主题，<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/24422335" title="知乎–有哪些好看的hexo主题">知乎–有哪些好看的hexo主题</a></p>
+<p>选个喜欢的主题，它的GitHub上会有部署的教程。</p>
+<p>基本步骤是，在博客的根目录下的themes目录下，创建你要使用的主题的文件夹，进入文件夹，然后git clone 主题的仓库地址。跟主题相关的配置一般都在该主题的文件夹下的_config.yml里。</p>
+<p>别忘了在_config.yml里更改<code>theme</code>的值</p>
+<h2 id="0x04-域名绑定"><a href="#0x04-域名绑定" class="headerlink" title="0x04 域名绑定"></a>0x04 域名绑定</h2><p>现在要想访问你的blog的地址是 Your_name.github.io,你可以绑定到你注册过的域名。</p>
+<p>先改一下DNS解析，我是在阿里云买的,直接在阿里云的控制台里,更改我的域名的解析,记录类型是CNAME，就是一个跳转，主机记录是设置你的二级域名，记录值填你原来的博客地址。</p>
+<p><img src="/img/hexoblog/2.png"></p>
+<p>然后在你博客的根目录的<code>Source</code>文件夹下，创建一个<code>CNAME</code>文件，在文件里写下你购买的域名。</p>
+<p>如我是<code>https://blog.yoyolllh.top</code></p>
+<p>然后再 <code>hexo g &amp;&amp; hexo d</code> 重新上传一下就可以通过你的域名访问了。</p>
+<h2 id="0x05-总结"><a href="#0x05-总结" class="headerlink" title="0x05 总结"></a>0x05 总结</h2><p>踩了许多的坑，小小总结一下</p>
+<ul>
+<li>在更换主题时，严格按照主题的README操作。</li>
+<li>绑定域名记得一定要创建<code>CNAME</code>文件，光在GitHub上绑定域名没有用，每次你重新上传时它都会解除绑定。</li>
+<li>使用 <code>hexo g --config source/_data/next.yml</code>重新指定配置文件生成静态文件。</li>
+<li>有些主题配置后仍使用不了，可以试试 <code>hexo clean</code>命令。</li>
+</ul>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+        <div id="lv-container"></div>
+        <div class="giscus"></div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>  Theme <a target="_blank" rel="noopener" href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.xml"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+</html>
