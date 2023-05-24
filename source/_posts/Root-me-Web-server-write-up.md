@@ -2,8 +2,8 @@
 title: Root-me Web-server write up
 date: 2018-11-22 10:13:19
 tags:
-    - CTF
     - web安全
+    - CTF
 ---
 
 root-me是一个在线的ctf题库(需翻墙)，包含了各个维度的题型，题不算难，但是比较全面。做了一下web-server的题，并做了记录。
