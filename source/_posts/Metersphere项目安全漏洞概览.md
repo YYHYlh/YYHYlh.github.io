@@ -3,7 +3,7 @@ title: Metersphere项目安全漏洞概览
 date: 2022-02-09 11:16:44
 tags:
     - 漏洞分析
-    - 安全技术
+    - 漏洞复现
 ---
 
     本文首发于奇安信攻防社区:https://forum.butian.net/share/1185
