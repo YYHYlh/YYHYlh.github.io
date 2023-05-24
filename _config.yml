@@ -122,7 +122,9 @@ comment:
 search:
   path: search.json
   field: post
+
+sitemap:
+  path: sitemap.xml
+
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
-deploy:
-  type: ''
