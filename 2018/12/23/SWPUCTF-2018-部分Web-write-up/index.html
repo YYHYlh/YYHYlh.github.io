@@ -60,7 +60,7 @@
         
 <div class="nav" id="nav">
     <div class="avatar-name">
-        <div class="avatar ">
+        <div class="avatar radius">
             <img src="/img/avatar.jpg" />
         </div>
         <div class="name">
@@ -163,7 +163,7 @@
 </span>
 </span>
     </div>
-    <div class="post-content ">
+    <div class="post-content no-indent">
         <h2 id="用优惠劵买个X"><a href="#用优惠劵买个X" class="headerlink" title="用优惠劵买个X?"></a>用优惠劵买个X?</h2><p>登录后给了一个优惠券，存在cookie的Auth里<br><img src="/img/swpu/1.png">  </p>
 <p>在购买界面输入该优惠券返回说需要24位的优惠券。<br>扫描目标站点发现有<a target="_blank" rel="noopener" href="http://www.zip,下载打开发现source.php/">www.zip,下载打开发现source.php</a></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">//生成优惠码</span><br><span class="line">$_SESSION[&#x27;seed&#x27;]=rand(0,999999999);</span><br><span class="line">function youhuima()&#123;</span><br><span class="line">    mt_srand($_SESSION[&#x27;seed&#x27;]);</span><br><span class="line">    $str_rand = &quot;abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;;</span><br><span class="line">    $auth=&#x27;&#x27;;</span><br><span class="line">    $len=15;</span><br><span class="line">    for ( $i = 0; $i &lt; $len; $i++ )&#123;</span><br><span class="line">        if($i&lt;=($len/2))</span><br><span class="line">              $auth.=substr($str_rand,mt_rand(0, strlen($str_rand) - 1), 1);</span><br><span class="line">        else</span><br><span class="line">              $auth.=substr($str_rand,(mt_rand(0, strlen($str_rand) - 1))*-1, 1);</span><br><span class="line">    &#125;</span><br><span class="line">    setcookie(&#x27;Auth&#x27;, $auth);</span><br><span class="line">&#125;</span><br><span class="line">//support</span><br><span class="line">    if (preg_match(&quot;/^\d+\.\d+\.\d+\.\d+$/im&quot;,$ip))&#123;</span><br><span class="line">        if (!preg_match(&quot;/\?|flag|&#125;|cat|echo|\*/i&quot;,$ip))&#123;</span><br><span class="line">               //执行命令</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">              //flag字段和某些字符被过滤!</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">             // 你的输入不正确!</span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>

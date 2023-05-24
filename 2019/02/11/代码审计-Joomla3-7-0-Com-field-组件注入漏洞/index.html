@@ -60,7 +60,7 @@
         
 <div class="nav" id="nav">
     <div class="avatar-name">
-        <div class="avatar ">
+        <div class="avatar radius">
             <img src="/img/avatar.jpg" />
         </div>
         <div class="name">
@@ -163,7 +163,7 @@
 </span>
 </span>
     </div>
-    <div class="post-content ">
+    <div class="post-content no-indent">
         <p>Joomla!是一套全球知名的内容管理系统。Joomla!是使用PHP语言加上MySQL数据库所开发的软件系统，可以在Linux、 Windows、MacOSX等各种不同的平台上执行。目前是由Open Source Matters（见扩展阅读）这个开放源码组织进行开发与支持，这个组织的成员来自全世界各地，小组成员约有150人，包含了开发者、设计者、系统管理者、文件撰写者，以及超过2万名的参与会员。</p>
 <h2 id="漏洞简述"><a href="#漏洞简述" class="headerlink" title="漏洞简述"></a>漏洞简述</h2><p>这个漏洞出现在Joomla3.7.0新增的组件com_field里，这个组件的访问没有做任何身份验证，并且在处理fullordering参数时没有合格的过滤，导致最终将用户的输入拼接在了sql查询语句的order by参数里，形成注入。</p>
 <h2 id="源码结构"><a href="#源码结构" class="headerlink" title="源码结构"></a>源码结构</h2><p>Joomla!源码结构如下图<br><img src="/img/joomla/1.png"></p>
