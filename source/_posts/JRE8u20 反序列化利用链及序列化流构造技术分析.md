@@ -103,15 +103,15 @@ JDK7u21的利用链如下，分别反序列化两个类，然后在put的方法�
 
 第二个对象—handler的反序列化过程中。
 
-![](img/jdk8u20/未命名文件 (1)_CW5bH-ug9v.jpg)
+![](img/jdk8u20/1.jpg)
 
 JDK8u20这条链的思路是增加一个不存在的field字段，这个字段中是一个序列化类，它包裹住AnnotationInvocationHandler，catch住AnnotationInvocationHandler反序列化过程中的异常，并且在后续的反序列化中不报错，它会被正常反序列化。然后在需要AnnotationInvocationHandler的时候，替换为之前field反序列化中生成的AnnotationInvocationHandler的reference。
 
 这个field字段可以加在两个地方，一个是HashSet的field字段，另一个是hashSet的成员的field。jdk8的利用链使用的包裹类为java.beans.beancontext.BeanContextSupport类。
 
-![](img/jdk8u20/未命名文件 (2)_uyEhwPsank.jpg)
+![](img/jdk8u20/2.jpg)
 
-![](img/jdk8u20/未命名文件 (3)_jGaKF4-QWo.jpg)
+![](img/jdk8u20/3.jpg)
 
 ```java
 private synchronized void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
