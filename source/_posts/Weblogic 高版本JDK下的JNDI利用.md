@@ -1,5 +1,5 @@
 ---
-title: Apache Dubbo （CVE-2023-23638）完整利用及工程化实践
+title: Weblogic 高版本JDK下的JNDI利用
 date: 2023-03-13 16:04:42
 tags:
     - 漏洞分析
