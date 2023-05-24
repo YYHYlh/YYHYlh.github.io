@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang=zh-CN>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="website">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        CodeQL库学习-SSRF漏洞挖掘 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/aircloud.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_28hi1hpxx24.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+
+    
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 常记常新 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar radius">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>LH</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/collect/">
+                    <i class="iconfont icon-shoucang1"></i>
+                    <span>收藏</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%84%E5%88%99%E5%88%86%E6%9E%90"><span class="toc-text">规则分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#isSource"><span class="toc-text">isSource</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#isSink"><span class="toc-text">isSink</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#isAdditionalTaintStep"><span class="toc-text">isAdditionalTaintStep</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#isSanitizer"><span class="toc-text">isSanitizer</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%84%E5%88%99%E5%AE%9E%E6%88%98"><span class="toc-text">规则实战</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BC%8F%E6%8A%A51"><span class="toc-text">漏报1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BC%8F%E6%8A%A52"><span class="toc-text">漏报2</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-bg" id="search-bg"></div>
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 常记常新 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        CodeQL库学习-SSRF漏洞挖掘
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2023-02-02 09:00:01</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#安全技术" title="安全技术">安全技术</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#代码审计" title="代码审计">代码审计</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <pre><code>本文首发于奇安信攻防社区:https://forum.butian.net/share/2117
+</code></pre>
+<h3 id="规则分析"><a href="#规则分析" class="headerlink" title="规则分析"></a>规则分析</h3><p>SSRF和常见的JNDI注入、sql注入</p>
+<p>JNDI注入：&amp;#x20;</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Context  c =  <span class="built_in">new</span> Context();</span><br><span class="line">c.lookup(<span class="string">&quot;ldap://127.0.0.1/xxx&quot;</span>) --&gt; sink</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Sink检测是否调用了lookup函数，且函数参数是否外部可控</p>
+<p>SQL注入：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">@RequestMapping(value = <span class="string">&quot;/one&quot;</span>)</span><br><span class="line">public List&lt;Student&gt; one(@RequestParam(value = <span class="string">&quot;username&quot;</span>) String username) &#123;</span><br><span class="line">    <span class="keyword">return</span> indexLogic.getStudent(username);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public List&lt;Student&gt; getStudent(String username) &#123;</span><br><span class="line">    String sql = <span class="string">&quot;select * from students where username like &#x27;%&quot;</span> + username + <span class="string">&quot;%&#x27;&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> jdbcTemplate.query(sql, ROW_MAPPER); -&gt; sink</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Sink检测是否调用了jdbcTemplate.query函数，且函数参数是否外部可控</p>
+<p>SSRF的常见代码表现形式：（HTTP SSRF）</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">URL url = <span class="built_in">new</span> URL(imageUrl);</span><br><span class="line">HttpURLConnection connection = (HttpURLConnection) url.openConnection(); --&gt; sink</span><br><span class="line">connection.setRequestMethod(<span class="string">&quot;GET&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> connection.getResponseMessage();</span><br></pre></td></tr></table></figure>
+
+<p>sink函数中并没有外部参数，检测sink需要和前面的代码联系，需要判断URL 对象在构造时是否外部可控。</p>
+<p>因此分析ql库中对SSRF漏洞是如何检测的：</p>
+<p>Config路径：ql&#x2F;java&#x2F;ql&#x2F;lib&#x2F;semmle&#x2F;code&#x2F;java&#x2F;security&#x2F;RequestForgeryConfig.qll</p>
+<h4 id="isSource"><a href="#isSource" class="headerlink" title="isSource"></a>isSource</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">source instanceof RemoteFlowSource and</span><br><span class="line"><span class="comment">// Exclude results of remote HTTP requests: fetching something else based on that result</span></span><br><span class="line"><span class="comment">// is no worse than following a redirect returned by the remote server, and typically</span></span><br><span class="line"><span class="comment">// we&#x27;re requesting a resource via https which we trust to only send us to safe URLs.</span></span><br><span class="line">not source.asExpr().(MethodAccess).getCallee() instanceof URLConnectionGetInputStreamMethod</span><br></pre></td></tr></table></figure>
+
+<p>source使用了常见的RemoteFlowSource，覆盖常见的远程请求，同时作为Method的source调用中，不能包含URLConnectionGetInputStreamMethod类型的调用</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** The method `java.net.URLConnection::getInputStream`. */</span></span><br><span class="line">class URLConnectionGetInputStreamMethod extends Method &#123;</span><br><span class="line">  URLConnectionGetInputStreamMethod() &#123;</span><br><span class="line">    this.getDeclaringType() instanceof TypeUrlConnection and</span><br><span class="line">    this.hasName(<span class="string">&quot;getInputStream&quot;</span>) and</span><br><span class="line">    this.hasNoParameters()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>即如下的Source：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.net.URLConnection.getInputStream()</span><br></pre></td></tr></table></figure>
+
+<p>这种不认为是SSRF的Source，可能是因为连接的数据是否可控不能确定</p>
+<h4 id="isSink"><a href="#isSink" class="headerlink" title="isSink"></a>isSink</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">override predicate isSink(DataFlow::Node sink) &#123; sink instanceof RequestForgerySink &#125;</span><br><span class="line"></span><br><span class="line">abstract class RequestForgerySink extends DataFlow::Node &#123; &#125;</span><br><span class="line"></span><br><span class="line">private class UrlOpenSinkAsRequestForgerySink extends RequestForgerySink &#123;</span><br><span class="line">  UrlOpenSinkAsRequestForgerySink() &#123; sinkNode(this, <span class="string">&quot;open-url&quot;</span>) &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">predicate sinkNode(Node node, <span class="type">string</span> kind) &#123;</span><br><span class="line">  exists(InterpretNode n | isSinkNode(n, kind) and n.asNode() = node)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>其中使用到了ExternalFlow.ql中的sinkNode谓词，该库中表示，该库为内部使用API，处理csv格式的数据，sinkNode(Node node, string kind)属于一个接口，从Node中找符合sinkModelCsv或者SinkModelCsv子类的Node数据，其中最后一个参数用于标识Sink的类型，每一列参数的含义在ExternalFlow.ql中有详细讲解，这里简单介绍几个常用的参数，在RequestForgeryConfig中使用的是sinkNode(this, “open-url”)</p>
+<ol>
+<li>package 包名</li>
+<li>类名</li>
+<li>是否跳转到子类</li>
+<li>方法名</li>
+<li>签名列，限制选择方法名</li>
+<li>ext 不太懂</li>
+<li>input 输入的位置</li>
+<li>kind 当前sink的类型</li>
+</ol>
+<p>就是匹配所有open-url类型的数据类型。</p>
+<p>sinkModelCsv谓词数据如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">private predicate sinkModelCsv(<span class="type">string</span> row) &#123;</span><br><span class="line">  row =</span><br><span class="line">    [</span><br><span class="line">      <span class="comment">// Open URL</span></span><br><span class="line">      <span class="string">&quot;java.net;URL;false;openConnection;;;Argument[-1];open-url&quot;</span>,</span><br><span class="line">      <span class="string">&quot;java.net;URL;false;openStream;;;Argument[-1];open-url&quot;</span>,</span><br><span class="line">      <span class="string">&quot;java.net.http;HttpRequest;false;newBuilder;;;Argument[0];open-url&quot;</span>,</span><br><span class="line">      <span class="string">&quot;java.net.http;HttpRequest$Builder;false;uri;;;Argument[0];open-url&quot;</span>,</span><br><span class="line">      <span class="string">&quot;java.net;URLClassLoader;false;URLClassLoader;(URL[]);;Argument[0];open-url&quot;</span>,</span><br><span class="line">      <span class="string">&quot;java.net;URLClassLoader;false;URLClassLoader;(URL[],ClassLoader);;Argument[0];open-url&quot;</span>,</span><br><span class="line">      <span class="string">&quot;java.net;URLClassLoader;false;URLClassLoader;(URL[],ClassLoader,URLStreamHandlerFactory);;Argument[0];open-url&quot;</span>,</span><br><span class="line">      <span class="string">&quot;java.net;URLClassLoader;false;URLClassLoader;(String,URL[],ClassLoader);;Argument[1];open-url&quot;</span>,</span><br><span class="line">      <span class="string">&quot;java.net;URLClassLoader;false;URLClassLoader;(String,URL[],ClassLoader,URLStreamHandlerFactory);;Argument[1];open-url&quot;</span>,</span><br><span class="line">      <span class="string">&quot;java.net;URLClassLoader;false;newInstance;;;Argument[0];open-url&quot;</span>,</span><br><span class="line">      <span class="comment">// Bean validation</span></span><br><span class="line">      <span class="string">&quot;javax.validation;ConstraintValidatorContext;true;buildConstraintViolationWithTemplate;;;Argument[0];bean-validation&quot;</span>,</span><br><span class="line">      <span class="comment">// Set hostname</span></span><br><span class="line">      <span class="string">&quot;javax.net.ssl;HttpsURLConnection;true;setDefaultHostnameVerifier;;;Argument[0];set-hostname-verifier&quot;</span>,</span><br><span class="line">      <span class="string">&quot;javax.net.ssl;HttpsURLConnection;true;setHostnameVerifier;;;Argument[0];set-hostname-verifier&quot;</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其他还有很多SinkModelCsv的子类，包含了一些第三方库的sink函数。</p>
+<p><img src="/img/codeql/image_kmGIio6Vo5.png"></p>
+<h4 id="isAdditionalTaintStep"><a href="#isAdditionalTaintStep" class="headerlink" title="isAdditionalTaintStep"></a>isAdditionalTaintStep</h4><p>前面提到，SSRF漏洞不同于JNDI注入或者SQL注入，它的sink检测需要联系sink之前的代码，判断sink的Method调用方是否外部可控。ql库中通过实现isAdditionalTaintStep(DataFlow::Node pred, DataFlow::Node succ)方法进行功能的实现。该谓词的作用是将两个原本不相连的Node强行连在一起</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">override predicate isAdditionalTaintStep(DataFlow::Node pred, DataFlow::Node succ) &#123;</span><br><span class="line">  any(RequestForgeryAdditionalTaintStep r).propagatesTaint(pred, succ)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private class DefaultRequestForgeryAdditionalTaintStep extends RequestForgeryAdditionalTaintStep &#123;</span><br><span class="line">  override predicate propagatesTaint(DataFlow::Node pred, DataFlow::Node succ) &#123;</span><br><span class="line">    <span class="comment">// propagate to a URI when its host is assigned to</span></span><br><span class="line">    exists(UriCreation c | c.getHostArg() = pred.asExpr() | succ.asExpr() = c)</span><br><span class="line">    or</span><br><span class="line">    <span class="comment">// propagate to a URL when its host is assigned to</span></span><br><span class="line">    exists(UrlConstructorCall c | c.getHostArg() = pred.asExpr() | succ.asExpr() = c)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里相对有点抽象，举个例子去进行理解</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(value = <span class="string">&quot;/one&quot;</span>)</span><br><span class="line">public String One(@RequestParam(value = <span class="string">&quot;url&quot;</span>) String imageUrl) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        URL url = <span class="built_in">new</span> URL(imageUrl);</span><br><span class="line">        HttpURLConnection connection = (HttpURLConnection) url.openConnection();</span><br><span class="line">        connection.setRequestMethod(<span class="string">&quot;GET&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> connection.getResponseMessage();</span><br><span class="line">    &#125; catch (IOException var3) &#123;</span><br><span class="line">        System.out.<span class="built_in">println</span>(var3);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Hello&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此处按照正常的逻辑，</p>
+<p><img src="/img/codeql/image_lcPVJlA7lz.png"></p>
+<p>由于url不被认为是污点，因此没有继续向后寻找，isAdditionalTaintStep的作用是：当存在<code>URL url = new URL(imageURL)</code>，且<code>imageURL</code>为污点时，认为 <code>url </code>也是污点。</p>
+<p>接着分析它是如何实现的，在函数中，pred代表的是污点，在SSRF中就是用户指定的URL字符串，succ则是代表类似URL(url)这种方法调用或者是对象的实例化。实现中的意思为，<strong>succ是一个UriCreation 调用或者一个UriConstructorCall调用，它的getHostArg方法返回的表达式等于污点node</strong>。其中UriCreation和UriConstructorCall的定义都在Networking.ql中，不做过多的分析。总的来说，它们匹配new URL()、URI.create()，并且其中url地址对应的参数需要是外部可控。满足上述条件的，我们认为它也是一个污点。从而成功的把url→new URL(url)链接起来。</p>
+<h4 id="isSanitizer"><a href="#isSanitizer" class="headerlink" title="isSanitizer"></a>isSanitizer</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">override predicate isSanitizer(DataFlow::Node node) &#123; node instanceof RequestForgerySanitizer &#125;</span><br><span class="line"></span><br><span class="line">private class PrimitiveSanitizer extends RequestForgerySanitizer &#123;</span><br><span class="line">  PrimitiveSanitizer() &#123;</span><br><span class="line">    this.getType() instanceof PrimitiveType or</span><br><span class="line">    this.getType() instanceof BoxedType or</span><br><span class="line">    this.getType() instanceof NumberType</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">private class HostnameSantizer extends RequestForgerySanitizer &#123;</span><br><span class="line">  HostnameSantizer() &#123; this.asExpr() = any(HostnameSanitizingPrefix hsp).getAnAppendedExpression() &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>该方法用于净化污点，去除一些误报。PrimitiveSanitizer 是常见的方法，不匹配基础类型、数字类型的节点。重点是第二个HostnameSantizer，HostnameSanitizingPrefix继承自InterestingPrefix，该类在Stringprefixes.qll中，该文件的注释中讲解了该类的作用，简单来说就是可以定义一个字符串前缀，并提供一个getAnAppendedExpression函数，用来匹配任意该前缀+ 污点字符串的节点，简单演示如下，其中suffix标识会被匹配到的节点</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* <span class="string">&quot;foo:&quot;</span> + suffix1</span><br><span class="line">* <span class="string">&quot;barfoo:&quot;</span> + suffix2</span><br><span class="line">* stringBuilder.<span class="built_in">append</span>(<span class="string">&quot;foo:&quot;</span>).<span class="built_in">append</span>(suffix3);</span><br><span class="line">* String.format(<span class="string">&quot;%sfoo:%s&quot;</span>, notSuffix, suffix4);</span><br></pre></td></tr></table></figure>
+
+<p>HostnameSanitizingPrefix 用一个正则定义前缀</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">HostnameSanitizingPrefix() &#123;</span><br><span class="line">  exists(</span><br><span class="line">    this.getStringValue()</span><br><span class="line">        .regexpFind(<span class="string">&quot;.*([?#]|[^?#:/\\\\][/\\\\]).*|[/\\\\][^/\\\\].*|^/$&quot;</span>, <span class="number">0</span>, offset)</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该正则匹配字符串中<code>？</code>、<code>#</code>等符号之后的部分，用来解决如下情况的误报：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">URL url = <span class="built_in">new</span> URL(<span class="string">&quot;http://127.0.0.1?x=&quot;</span>+imageUrl);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>此时，imageUrl无法指定目标访问任意的地址，也就不算是SSRF漏洞。</p>
+<h3 id="规则实战"><a href="#规则实战" class="headerlink" title="规则实战"></a>规则实战</h3><p>使用microserviceseclab进行测试，该项目中的SSRFController.java包含了常见的5种SSRF漏洞。首先直接运行该检测QL，可以发现3处漏洞</p>
+<p><img src="/img/codeql/image_cXk61TPDw4.png"></p>
+<p>漏洞代码如下:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(value = <span class="string">&quot;/one&quot;</span>)</span><br><span class="line">public String One(@RequestParam(value = <span class="string">&quot;url&quot;</span>) String imageUrl) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        URL url = <span class="built_in">new</span> URL(imageUrl);</span><br><span class="line">        HttpURLConnection connection = (HttpURLConnection) url.openConnection();</span><br><span class="line">        connection.setRequestMethod(<span class="string">&quot;GET&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> connection.getResponseMessage();</span><br><span class="line">    &#125; catch (IOException var3) &#123;</span><br><span class="line">        System.out.<span class="built_in">println</span>(var3);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Hello&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@RequestMapping(value = <span class="string">&quot;/four&quot;</span>)</span><br><span class="line">public String Four(@RequestParam(value = <span class="string">&quot;url&quot;</span>) String imageUrl) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        DefaultHttpClient client = <span class="built_in">new</span> DefaultHttpClient();</span><br><span class="line">        HttpGet get = <span class="built_in">new</span> HttpGet(imageUrl);</span><br><span class="line">        HttpResponse response = client.execute(get);</span><br><span class="line">        <span class="keyword">return</span> response.toString();</span><br><span class="line">    &#125; catch (IOException var1) &#123;</span><br><span class="line">        System.out.<span class="built_in">println</span>(var1);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Hello&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@RequestMapping(value = <span class="string">&quot;five&quot;</span>)</span><br><span class="line">public String Five(@RequestParam(value = <span class="string">&quot;url&quot;</span>) String imageUrl) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        URL url = <span class="built_in">new</span> URL(imageUrl);</span><br><span class="line">        InputStream inputStream = url.openStream();</span><br><span class="line">        <span class="keyword">return</span> String.valueOf(inputStream.read());</span><br><span class="line">    &#125; catch (IOException var1) &#123;</span><br><span class="line">        System.out.<span class="built_in">println</span>(var1);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Hello&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于该项目使用了Spring-boot框架， 因此Source都是@RequestParam注解的参数。</p>
+<p>在被成功检测的漏洞中，1和5分别使用了url.openConnection和url.openStream，被sinkModelCsv中的如下规则所匹配</p>
+<p>\root\codeQL\databases\micro-service-seclab-database\src.zip\root\codeQL\micro_service_seclab\src\main\java\com\l4yn3\microserviceseclab\controller\SSRFController.java</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;java.net;URL;false;openConnection;;;Argument[-1];open-url&quot;</span></span><br><span class="line"><span class="string">&quot;java.net;URL;false;openStream;;;Argument[-1];open-url&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>4中使用了第三方的HTTP请求库，同样可以在ApacheHttp.qll中的ApacheHttpOpenUrlSink找到对应的sink定义</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;org.apache.http.client.methods;HttpGet;false;HttpGet;;;Argument[0];open-url&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>2和3 没有被检测到，因此接下来分析其原因。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(value = <span class="string">&quot;/two&quot;</span>)</span><br><span class="line">public String Two(@RequestParam(value = <span class="string">&quot;url&quot;</span>) String imageUrl) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        URL url = <span class="built_in">new</span> URL(imageUrl);</span><br><span class="line">        HttpResponse response = Request.Get(String.valueOf(url)).execute().returnResponse();</span><br><span class="line">        <span class="keyword">return</span> response.toString();</span><br><span class="line">    &#125; catch (IOException var1) &#123;</span><br><span class="line">        System.out.<span class="built_in">println</span>(var1);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Hello&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@RequestMapping(value = <span class="string">&quot;/three&quot;</span>)</span><br><span class="line">public String Three(@RequestParam(value = <span class="string">&quot;url&quot;</span>) String imageUrl) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        URL url = <span class="built_in">new</span> URL(imageUrl);</span><br><span class="line">        OkHttpClient client = <span class="built_in">new</span> OkHttpClient();</span><br><span class="line">        com.squareup.okhttp.Request request = <span class="built_in">new</span> com.squareup.okhttp.Request.Builder().get().url(url).build();</span><br><span class="line">        Call call = client.newCall(request);</span><br><span class="line">        Response response = call.execute();</span><br><span class="line">        <span class="keyword">return</span> response.toString();</span><br><span class="line">    &#125; catch (IOException var1) &#123;</span><br><span class="line">        System.out.<span class="built_in">println</span>(var1);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Hello&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="漏报1"><a href="#漏报1" class="headerlink" title="漏报1"></a>漏报1</h4><p>该漏洞的触发流程如下：</p>
+<p>imageUrl→url &#x3D; new URL(imageUrl)→String.valueOf(url)→Request.Get(String.valueOf(url))</p>
+<p>首先可以发现，在现有的规则中，没有 org.apache.http.client.fluent.Request.Get()这个sink。因此我们在Apachehttp.qll中的ApacheHttpOpenUrlSink加入如下行，</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//my</span></span><br><span class="line"><span class="string">&quot;org.apache.http.client.fluent;Request;false;Get;;;Argument[0];open-url&quot;</span>,</span><br></pre></td></tr></table></figure>
+
+<p>接着重新运行漏洞查询ql，会发现还是无法检测到该链。原因是什么呢？第一反应是规则是否写的有问题，直接在RequestForgerySink使用Quick Evalutation</p>
+<p><img src="/img/codeql/image_gY3lLoVvlt.png"></p>
+<p>会发现该sink点被成功找到了</p>
+<p><img src="/img/codeql/image_tcm0A2mRVI.png"></p>
+<p>既然sink点没有问题，那没有扫出来就说明是路径的问题。我们再观察漏洞触发点，会发现，从url到Requests.get()中，存在一个String.valueOf(url)方法，正常情况下程序不会觉得String.valueOf方法返回的仍然是污点。因此我们需要修改Config中的isAdditionalTaintStep方法，将java.net.URL和String.valueOf(url)绑定。为了不影响原有代码，新创建一个ql文件，写如下内容</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> java</span><br><span class="line"><span class="keyword">import</span> semmle.code.java.security.RequestForgeryConfig</span><br><span class="line"><span class="keyword">import</span> DataFlow::PathGraph</span><br><span class="line"><span class="keyword">import</span> semmle.code.java.dataflow.ExternalFlow</span><br><span class="line"></span><br><span class="line">class MySinkModelCsv extends SinkModelCsv &#123;</span><br><span class="line">    override predicate row(<span class="type">string</span> row) &#123;</span><br><span class="line">      row =</span><br><span class="line">        [</span><br><span class="line">            <span class="string">&quot;org.apache.http.client.fluent;Request;false;Get;;;Argument[0];open-url&quot;</span>,</span><br><span class="line"></span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class TypeStringLib extends RefType &#123;</span><br><span class="line">  TypeStringLib() &#123; this.hasQualifiedName(<span class="string">&quot;java.lang&quot;</span>, <span class="string">&quot;String&quot;</span>) &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class StringValue extends MethodAccess &#123;</span><br><span class="line">    StringValue()&#123;</span><br><span class="line">      this.getCallee().getDeclaringType() instanceof TypeStringLib and</span><br><span class="line">      this.getCallee().hasName(<span class="string">&quot;valueOf&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private class MyRequestForgeryAdditionalTaintStep extends RequestForgeryAdditionalTaintStep &#123;</span><br><span class="line">    override predicate propagatesTaint(DataFlow::Node pred, DataFlow::Node succ) &#123;</span><br><span class="line">      <span class="comment">// propagate to a URI when its host is assigned to</span></span><br><span class="line">      exists(UriCreation c | c.getHostArg() = pred.asExpr() | succ.asExpr() = c)</span><br><span class="line">      or</span><br><span class="line">      <span class="comment">// propagate to a URL when its host is assigned to</span></span><br><span class="line">      exists(UrlConstructorCall c | c.getHostArg() = pred.asExpr() | succ.asExpr() = c)</span><br><span class="line">      or </span><br><span class="line">      <span class="comment">//处理String.valueOf(URL)</span></span><br><span class="line">      exists(StringValue c | c.getArgument(<span class="number">0</span>) = pred.asExpr() | succ.asExpr() = c)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">class MyRequestForgeryConfiguration extends RequestForgeryConfiguration &#123;</span><br><span class="line">    MyRequestForgeryConfiguration() &#123; this = <span class="string">&quot;Server-Side Request Forgery&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line">    override predicate isAdditionalTaintStep(DataFlow::Node pred, DataFlow::Node succ) &#123;</span><br><span class="line">      any(RequestForgeryAdditionalTaintStep r).propagatesTaint(pred, succ)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">from DataFlow::PathNode source, DataFlow::PathNode sink, MyRequestForgeryConfiguration conf</span><br><span class="line">where conf.hasFlowPath(source, sink)</span><br><span class="line"><span class="keyword">select</span> sink.getNode(), source, sink, <span class="string">&quot;Potential server-side request forgery due to $@.&quot;</span>,</span><br><span class="line">  source.getNode(), <span class="string">&quot;a user-provided value&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>关键代码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//处理String.valueOf(URL)</span></span><br><span class="line">exists(StringValue c | c.getArgument(<span class="number">0</span>) = pred.asExpr() | succ.asExpr() = c)</span><br></pre></td></tr></table></figure>
+
+<p>此时成功检测到该漏洞</p>
+<p><img src="/img/codeql/image_PhqiY4qX9z.png"></p>
+<h4 id="漏报2"><a href="#漏报2" class="headerlink" title="漏报2"></a>漏报2</h4><p>漏洞代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(value = <span class="string">&quot;/three&quot;</span>)</span><br><span class="line">public String Three(@RequestParam(value = <span class="string">&quot;url&quot;</span>) String imageUrl) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        URL url = <span class="built_in">new</span> URL(imageUrl);</span><br><span class="line">        OkHttpClient client = <span class="built_in">new</span> OkHttpClient();</span><br><span class="line">        com.squareup.okhttp.Request request = <span class="built_in">new</span> com.squareup.okhttp.Request.Builder().get().url(url).build();</span><br><span class="line">        Call call = client.newCall(request);</span><br><span class="line">        Response response = call.execute();</span><br><span class="line">        <span class="keyword">return</span> response.toString();</span><br><span class="line">    &#125; catch (IOException var1) &#123;</span><br><span class="line">        System.out.<span class="built_in">println</span>(var1);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Hello&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方式使用了Okhttp发起HTTP请求，okhttp是链式调用，常见的请求代码写法如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">new</span> com.squareup.okhttp.Request.Builder().xxx.xxx.xxx.url(url).xxx.build()</span><br></pre></td></tr></table></figure>
+
+<p>这种请求相对更复杂，不适合使用之前的csv格式写漏洞检测规则， 因此需要自行构造规则。</p>
+<p>漏洞的构造中我认为有两个关键的定位锚点，一个是url(url)，一个是build()，url()确定是否引入污点，build()确定sink的位置。结合这两者，进行检测ql的构造。</p>
+<p>首先观察这种结构的语法树</p>
+<p><img src="/img/codeql/image_lwxxLfrbPa.png"></p>
+<p>这种链式结构调用在语法树中是包含的关系，当获取到最外层的MethodAccess时，可以使用getAChildExpr()方法返回其子语句，使用getAChildExpr+()可以递归返回全部子语句。结合前面说到的两个关键定位锚点，进行如下代码构造</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">MethodAccess url(MethodAccess ma,DataFlow::Node node)&#123;</span><br><span class="line">    exists( MethodAccess mc | mc = ma.getAChildExpr()| <span class="keyword">if</span> mc.getCallee().hasName(<span class="string">&quot;url&quot;</span>) and mc.getArgument(<span class="number">0</span>) = node.asExpr() then result = mc <span class="keyword">else</span> result = url(mc,node)</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MethodAccess m(DataFlow::Node node)&#123;</span><br><span class="line">    exists(</span><br><span class="line">        MethodAccess ma | ma.getCallee().hasName(<span class="string">&quot;build&quot;</span>) and ma.getCallee().getDeclaringType().hasName(<span class="string">&quot;Builder&quot;</span>) |result = url(ma,node)</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>m方法用来寻找Builder.build()方法，找到之后，调用第一个url方法，并将污点node和找到的MethodAccess作为参数传递进函数。url方法对传入的MethodAccess调用getAChildExpr进行递归检查，查找是否存在url方法的调用，并且污点node是url方法的参数。写好这两个方法后，重写五点分析Configuration中的isSink方法， 在原有的基础上增加对这个m方法的检查，完整代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class MyRequestForgeryConfiguration extends RequestForgeryConfiguration &#123;</span><br><span class="line">    MyRequestForgeryConfiguration() &#123; this = <span class="string">&quot;Server-Side Request Forgery&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line">    override predicate isSink(DataFlow::Node sink) &#123; </span><br><span class="line">        sink instanceof RequestForgerySink or  </span><br><span class="line">        <span class="comment">//sink = URL对象</span></span><br><span class="line">        exists (m(sink))</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    override predicate isAdditionalTaintStep(DataFlow::Node pred, DataFlow::Node succ) &#123;</span><br><span class="line">      any(RequestForgeryAdditionalTaintStep r).propagatesTaint(pred, succ)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重新执行ql，成功检测到所有种类的SSRF漏洞</p>
+<p><img src="/img/codeql/image_PAZaAwl3hT.png"></p>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+        <div id="lv-container"></div>
+        <div class="giscus"></div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>  Theme <a target="_blank" rel="noopener" href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.xml"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+</html>
