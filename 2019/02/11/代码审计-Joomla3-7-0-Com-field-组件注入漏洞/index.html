@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang=zh-CN>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="website">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        代码审计-Joomla3.7.0_Com_field_组件注入漏洞 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/aircloud.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_28hi1hpxx24.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+
+    
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 常记常新 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>LH</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/collect/">
+                    <i class="iconfont icon-shoucang1"></i>
+                    <span>收藏</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E7%AE%80%E8%BF%B0"><span class="toc-text">漏洞简述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E7%BB%93%E6%9E%84"><span class="toc-text">源码结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B"><span class="toc-text">调用流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D%E6%96%B9%E6%B3%95"><span class="toc-text">修复方法</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-bg" id="search-bg"></div>
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 常记常新 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        代码审计-Joomla3.7.0_Com_field_组件注入漏洞
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-02-11 01:37:32</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#web安全" title="web安全">web安全</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#代码审计" title="代码审计">代码审计</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <p>Joomla!是一套全球知名的内容管理系统。Joomla!是使用PHP语言加上MySQL数据库所开发的软件系统，可以在Linux、 Windows、MacOSX等各种不同的平台上执行。目前是由Open Source Matters（见扩展阅读）这个开放源码组织进行开发与支持，这个组织的成员来自全世界各地，小组成员约有150人，包含了开发者、设计者、系统管理者、文件撰写者，以及超过2万名的参与会员。</p>
+<h2 id="漏洞简述"><a href="#漏洞简述" class="headerlink" title="漏洞简述"></a>漏洞简述</h2><p>这个漏洞出现在Joomla3.7.0新增的组件com_field里，这个组件的访问没有做任何身份验证，并且在处理fullordering参数时没有合格的过滤，导致最终将用户的输入拼接在了sql查询语句的order by参数里，形成注入。</p>
+<h2 id="源码结构"><a href="#源码结构" class="headerlink" title="源码结构"></a>源码结构</h2><p>Joomla!源码结构如下图<br><img src="/img/joomla/1.png"></p>
+<h2 id="调用流程"><a href="#调用流程" class="headerlink" title="调用流程"></a>调用流程</h2><p>入口函数如下，前面的都是用来宏定义一些参数，最后一行execute转入site.php接着转入helper.php，通过require_once调用传入的组件参数。</p>
+<p><img src="/img/joomla/2.png"></p>
+<p>如下为Joomla的调用栈,可以很清晰的看到Joomla的调用路径。</p>
+<p><img src="/img/joomla/3.png"></p>
+<p>这个fields.php关键代码如下。分别完成了组件注册，控制器的实例生成，执行命令等功能。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">JLoader::register(&#x27;FieldsHelper&#x27;, JPATH_ADMINISTRATOR . &#x27;/components/com_fields/helpers/fields.php&#x27;);</span><br><span class="line">$controller = JControllerLegacy::getInstance(&#x27;Fields&#x27;);</span><br><span class="line">$controller-&gt;execute(JFactory::getApplication()-&gt;input-&gt;get(&#x27;task&#x27;));</span><br><span class="line">$controller-&gt;redirect();</span><br></pre></td></tr></table></figure>
+
+
+<p>首先来看看fields组件生成实例部分的代码，在它的构造函数里，注意到当我们访问这个组件时，它会把路径设置为JPATH_COMPONENT_ADMINISTRATOR,而这个宏定义默认为administrator\components\，使得后面加载model时是直接用administrator目录下的函数进行加载。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public function __construct($config = array())</span><br><span class="line">&#123;</span><br><span class="line">    $this-&gt;input = JFactory::getApplication()-&gt;input;</span><br><span class="line">    // Frontpage Editor Fields Button proxying:</span><br><span class="line">    if ($this-&gt;input-&gt;get(&#x27;view&#x27;) === &#x27;fields&#x27; &amp;&amp; $this-&gt;input-&gt;get(&#x27;layout&#x27;) === &#x27;modal&#x27;)</span><br><span class="line">    &#123;</span><br><span class="line">        // Load the backend language file.</span><br><span class="line">        $lang = JFactory::getLanguage();</span><br><span class="line">        $lang-&gt;load(&#x27;com_fields&#x27;, JPATH_ADMINISTRATOR);</span><br><span class="line">        $config[&#x27;base_path&#x27;] = JPATH_COMPONENT_ADMINISTRATOR;</span><br><span class="line">    &#125;</span><br><span class="line">    parent::__construct($config);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>在获取实例后就进入了$controller-&gt;execute方法，该方法首先调用如下函数，它最后返回的doTask值为display,接着调用库函数中的display函数，它又会调用组件目录下display函数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public function execute($task)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;task = $task;</span><br><span class="line">        $task = strtolower($task);</span><br><span class="line">        if (isset($this-&gt;taskMap[$task]))</span><br><span class="line">        &#123;</span><br><span class="line">            $doTask = $this-&gt;taskMap[$task];</span><br><span class="line">        &#125;</span><br><span class="line">        elseif (isset($this-&gt;taskMap[&#x27;__default&#x27;]))</span><br><span class="line">        &#123;</span><br><span class="line">            $doTask = $this-&gt;taskMap[&#x27;__default&#x27;];</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            throw new Exception(JText::sprintf(&#x27;JLIB_APPLICATION_ERROR_TASK_NOT_FOUND&#x27;, $task), 404);</span><br><span class="line">        &#125;</span><br><span class="line">        // Record the actual task being fired</span><br><span class="line">        $this-&gt;doTask = $doTask;</span><br><span class="line">        return $this-&gt;$doTask();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p> |</p>
+<p>display函数调用组件的model文件，接着它调用了libraries\legacy\model\list.php中的populateState方法，在处理参数fulloredering时，没有太多严格的过滤，接着就直接使用了setstate方法把用户输入保存了下来。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">case &#x27;fullordering&#x27;:</span><br><span class="line">    $orderingParts = explode(&#x27; &#x27;, $value);</span><br><span class="line">    if (count($orderingParts) &gt;= 2)</span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;setState(&#x27;list.ordering&#x27;, $ordering);</span><br><span class="line">        $this-&gt;setState(&#x27;list.direction&#x27;, $direction);</span><br><span class="line">    &#125;</span><br><span class="line">    break;</span><br><span class="line">    ...</span><br><span class="line">$value = $app-&gt;getUserStateFromRequest($this-&gt;context . &#x27;.limitstart&#x27;, &#x27;limitstart&#x27;, 0, &#x27;int&#x27;);</span><br><span class="line">$limitstart = ($limit != 0 ? (floor($value / $limit) * $limit) : 0);</span><br><span class="line">$this-&gt;setState(&#x27;list.start&#x27;, $limitstart);</span><br></pre></td></tr></table></figure>
+
+<p> |</p>
+<p>保存下来的用户输入如下。</p>
+<p><img src="/img/joomla/4.png"></p>
+<p>整个调用栈如下</p>
+<p><img src="/img/joomla/5.png"></p>
+<p>其中调用getUserStateFromRequest方法处理用户的输入，接着它调用了getUserState方法进行处理，注册session,生成list.fullordering的值。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public function getUserState($key, $default = null)</span><br><span class="line">&#123;</span><br><span class="line">    $session = JFactory::getSession();</span><br><span class="line">    $registry = $session-&gt;get(&#x27;registry&#x27;);</span><br><span class="line">    if (!is_null($registry))</span><br><span class="line">    &#123;</span><br><span class="line">        return $registry-&gt;get($key, $default);</span><br><span class="line">    &#125;</span><br><span class="line">    return $default;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> |</p>
+<p>接着在display函数里的$this-&gt;get(Items’)方法中，通过getstate方法将list.fullordering的值，在逃脱了escape方法过滤的情况下，拼接进了sql语句中，并在之后得到执行并回显</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// Add the list ordering clause</span><br><span class="line">$listOrdering = $this-&gt;getState(&#x27;list.fullordering&#x27;, &#x27;a.ordering&#x27;);</span><br><span class="line">$orderDirn    = &#x27;&#x27;;</span><br><span class="line">if (empty($listOrdering))</span><br><span class="line">&#123;</span><br><span class="line">    $listOrdering  = $this-&gt;state-&gt;get(&#x27;list.ordering&#x27;, &#x27;a.ordering&#x27;);</span><br><span class="line">    $orderDirn     = $this-&gt;state-&gt;get(&#x27;list.direction&#x27;, &#x27;DESC&#x27;);</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">$query-&gt;order($db-&gt;escape($listOrdering) . &#x27; &#x27; . $db-&gt;escape($orderDirn));  </span><br><span class="line">return $query;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果如下</p>
+<p><img src="/img/joomla/6.png"></p>
+<p>流程图如下</p>
+<p><img src="/img/joomla/7.png"></p>
+<h2 id="修复方法"><a href="#修复方法" class="headerlink" title="修复方法"></a>修复方法</h2><p>官方给出的修复如下</p>
+<p><img src="/img/joomla/8.png"></p>
+<p>在第三步拼接sql时，在administrator&#x2F;components&#x2F;com_fields&#x2F;models&#x2F;fields.php里不再使用用户可控的fullordering参数，而是直接拼接ordering参数，而这个参数在输入时会进行白名单检测，无法形成注入，因此可以成功防御此漏洞。</p>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+        <div id="lv-container"></div>
+        <div class="giscus"></div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>  Theme <a target="_blank" rel="noopener" href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.xml"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+</html>
