@@ -119,6 +119,9 @@ comment:
         crossorigin="anonymous"
         async>
     </script>
+search:
+  path: search.json
+  field: post
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
