@@ -4,7 +4,7 @@
   
     
     <entry>
-      <title>Apache Dubbo （CVE-2023-23638）完整利用及工程化实践</title>
+      <title>Apache Dubbo反序列化漏洞（CVE-2023-23638）完整利用及工程化实践</title>
       <link href="/2023/05/11/Apache%20Dubbo%20%EF%BC%88CVE-2023-23638%EF%BC%89%E5%AE%8C%E6%95%B4%E5%88%A9%E7%94%A8%E5%8F%8A%E5%B7%A5%E7%A8%8B%E5%8C%96%E5%AE%9E%E8%B7%B5/"/>
       <url>/2023/05/11/Apache%20Dubbo%20%EF%BC%88CVE-2023-23638%EF%BC%89%E5%AE%8C%E6%95%B4%E5%88%A9%E7%94%A8%E5%8F%8A%E5%B7%A5%E7%A8%8B%E5%8C%96%E5%AE%9E%E8%B7%B5/</url>
       
@@ -25,7 +25,7 @@
     
     
     <entry>
-      <title>Apache dubbo 反序列化漏洞（CVE-2023-23638）分析及利用探索</title>
+      <title>Apache Dubbo 反序列化漏洞（CVE-2023-23638）分析及利用探索</title>
       <link href="/2023/04/08/Apache%20dubbo%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2023-23638%EF%BC%89%E5%88%86%E6%9E%90%E5%8F%8A%E5%88%A9%E7%94%A8%E6%8E%A2%E7%B4%A2/"/>
       <url>/2023/04/08/Apache%20dubbo%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2023-23638%EF%BC%89%E5%88%86%E6%9E%90%E5%8F%8A%E5%88%A9%E7%94%A8%E6%8E%A2%E7%B4%A2/</url>
       
@@ -37,7 +37,7 @@
             
             <tag> 漏洞分析 </tag>
             
-            <tag> 安全技术 </tag>
+            <tag> 漏洞复现 </tag>
             
         </tags>
       
@@ -121,7 +121,7 @@
             
             <tag> 漏洞分析 </tag>
             
-            <tag> 安全技术 </tag>
+            <tag> 漏洞复现 </tag>
             
         </tags>
       
