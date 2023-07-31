@@ -9,8 +9,6 @@ date: 2023-05-23 07:19:09
 
 漏洞研究 / 代码审计 / 漏洞挖掘
 
-Email: laihan4396@gmail.com
-
 Github: https://github.com/yyhylh
 
 一些漏洞挖掘成果:
