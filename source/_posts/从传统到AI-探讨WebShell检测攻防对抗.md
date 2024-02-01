@@ -316,9 +316,7 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
 
 * 利用异常捕获
 
-
     利用动态沙箱引擎无法准确判断并模拟用户的输入内容，进行绕过。
-
     ```java
     <%
         try{
@@ -341,7 +339,7 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
 
 可以利用Java的语言特性误导引擎对方法调用的识别
 
-* 利用方法“重载”
+- 利用方法“重载”
 
     首先提出一个问题。在java中，一个类如果长这样：
 
@@ -415,7 +413,7 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
 
     对于检测引擎来说，样本运行的是两个空的setDataSourceName和setAutoCommit方法。但实际上程序执行的还是JdbcRowSetImpl的方法，导致了绕过。
 
-* 利用Java类的多态误导引擎识别对象类型
+- 利用Java类的多态误导引擎识别对象类型
     
     如果存在如下接口：
 
@@ -464,7 +462,7 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
     %>
     ```
 
-* 隐式方法调用
+- 隐式方法调用
 
     java中存在一些语法糖，如果引擎未能对这类模式进行识别，则也可以产生绕过。
 
@@ -481,7 +479,7 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
 
     对对象进行字符串拼接时，会隐式的调用其`toString`方法。类似还有`hashCode`之类的方法。
 
-* 隐藏污点传播
+- 隐藏污点传播
 
     单是上面几类绕过，更多的是阻断引擎发现我们的意图是在执行危险的sink，在很多时候还是无法绕过真实的检测引擎。有一个重要原因是source点往往会或多或少的暴露我们的真实意图。拿上面这个样本来说：
 
