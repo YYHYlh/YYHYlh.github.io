@@ -31,11 +31,15 @@ tags:
 
 在Tabby中分别查找JDK11中调用了这两个方法的方法：
 
- ![](/img/aiWebshell/03c4a93c-d5c6-4f1a-82f7-8f9479a6a8e7.png) ![](/img/aiWebshell/3c44d66e-2b33-4497-b089-bb4f7f60c3f2.png)可以发现链不是很多，逐一手动分析。由于反射的代码特征相对明显，因此尽量减少对非公共方法或者类的依赖。整理各个关键类的特性如下
+ ![](/img/aiWebshell/03c4a93c-d5c6-4f1a-82f7-8f9479a6a8e7.png) 
+ ![](/img/aiWebshell/3c44d66e-2b33-4497-b089-bb4f7f60c3f2.png)
+ 
+
+可以发现链不是很多，逐一手动分析。由于反射的代码特征相对明显，因此尽量减少对非公共方法或者类的依赖。整理各个关键类的特性如下
 
 * com.sun.tools.jdi.AbstractLauncher的两个实现类：公共类，执行命令的方法为公共方法
 * sun.security.krb5.internal.ccache.FileCredentialsCache$2：内部匿名类，无公共调用方法
-* sun.net.www.MimeLauncher： 非公共类
+* sun.net.www.MimeLauncher：非公共类
 * jdk.internal内的多个类：属于jdk.internal模块，Tomcat的WebShell默认情况下访问不到该模块，需要使用反射等方法进行类加载，动静比较大。如果目标引擎不会拦截反射可以考虑使用
 
 `com.sun.tools.jdi.AbstractLauncher`的两个实现类无疑是最符合要求的。两个类差不多，这里以`com.sun.tools.jdi.SunCommandLineLauncher`举例分析。其存在一个public的`launch`方法，通过对参数的一系列赋值，对传入的命令进行字符串拼接，调用其父类的`launch`方法。
@@ -109,7 +113,7 @@ synchronized void launchAndAccept() throws
 
     Thread acceptingThread = acceptConnection();
     Thread monitoringThread = monitorTarget();
-		...
+...
 ```
 
 可以看到，没有什么过滤，可以直接到达Runtime.getRuntime().exec()。并且参数也是从第一个`launch`方法中传进去的，攻击者可控。看起来可以用来构建WebShell。在构建的过程中需要注意一个点：launch函数的入参是这样的:
@@ -177,7 +181,7 @@ public JdiInitiator(int port, List<String> remoteVMOptions, String remoteAgent,
 
 构造方法其将传入的customConnectorArgs对象最终导入到connectorArgs 属性，另外在isLaunch为true的情况下，connectorName为`com.sun.jdi.CommandLineLaunch`，findConnector会根据该字段去寻找，而这正是`com.sun.tools.jdi.SunCommandLineLauncher`的name。
 
- ![](/img/aiWebshell/8b7160bf-6bb8-4a14-b4f3-a8a883ff38e0.png) ![](https://prod-files-secure.s3.us-west-2.amazonaws.com/a116b209-23ed-47e3-b176-d57fece98279/6ce1c1fd-a721-4391-a14a-784e213a2b1a/Untitled.png)
+ ![](/img/aiWebshell/8b7160bf-6bb8-4a14-b4f3-a8a883ff38e0.png)
 
 该方法最终调用launchTarget()：
 
@@ -211,7 +215,7 @@ private VirtualMachine launchTarget() {
 
 这个样本一方面使用了不常见的类进行命令执行，可以绕过静态检测引擎，另外一方面，它在执行命令时使用是其接口类的launch方法，就像是Tabby搜不到该类一样，对于模拟污点执行引擎来说，从接口调用，搜索并遍历其实现类的方法调用是比较困难且消耗性能的，它很难判断当前使用的这个connector是否是一个危险的connector，从而被绕过。这个类的特性很好，一个公共构造函数调用就可以完成命令执行，和今年（23年）的KCon上的议题《Magic In Java API》里提到`PrintServiceLookup`类有异曲同工之妙，可以用在例如Dubbo的CVE-2023-23638的漏洞利用，或者其他类似的反序列化场景。但可惜是这个类仅在JDK9及以上的版本存在，并且在今年5月jdk的一次更新中，禁用了对vmexec参数的赋值，导致无法再通过直接调用构造方法触发命令执行：
 
- ![](/img/aiWebshell/a015cb41-dc19-4ad6-8893-34aa4f733561.png) ![](https://prod-files-secure.s3.us-west-2.amazonaws.com/a116b209-23ed-47e3-b176-d57fece98279/2c55274e-f443-4175-a23a-e3221286e510/Untitled.png)
+ ![](/img/aiWebshell/a015cb41-dc19-4ad6-8893-34aa4f733561.png
 
 这个修改导致该方法无法在目前最新版本的jdk11.0.20及以以后的版本中使用。
 
@@ -385,7 +389,6 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
 
   这是一个乍看起来重载了，但是又没完全重载的例子。事实上，程序最后会调用的均是入参为`String`的print方法，在第一个例子中，会调用A.print()，在第二个例子中会调用B.print()。
 
-  \
   重载对方法的要求是入参类型**完全相同**。在上述两个例子中，子类和父类的参数都不同，也就代表A.print和B.print是两个不同的方法。而java的方法调用过程中，并不是遵循“先在子类的方法中寻找符合条件的方法，找不到再去父类中寻找这种方法”，而是直接在目标类及其所有父类方法中去找和调用方法最匹配的那个方法，进行加载和调度。然而对于WebShell检测引擎来说，可能为了性能考虑，或者是对Java的方法调用过程不够了解，会在模拟运行时，遵循上面说的那种寻找方法的方法，先在子类方法中寻找，找不到再去父类方法中寻找。导致了引擎获取到的执行方法和Java程序实际的执行方法出现不同，从而触发了绕过。举一个WebShell的例子：
 
   ```java
@@ -409,8 +412,9 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
   ```
 
   对于检测引擎来说，样本运行的是两个空的setDataSourceName和setAutoCommit方法。但实际上程序执行的还是JdbcRowSetImpl的方法，导致了绕过。
-* 利用Java类的多态误导引擎识别对象类型
 
+* 利用Java类的多态误导引擎识别对象类型
+    
   如果存在如下接口：
 
   ```java
@@ -429,7 +433,7 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
 
   这样毫无疑问会编译不通过，因为我们没有在B中对A接口的两个方法定义进行实现
 
-   ![](/img/aiWebshell/21227952-31d0-4c11-98f7-bc88163e7475.png) ![](https://prod-files-secure.s3.us-west-2.amazonaws.com/a116b209-23ed-47e3-b176-d57fece98279/6ec7baba-b093-42e4-93cf-7df025c27be8/Untitled.png)
+   ![](/img/aiWebshell/21227952-31d0-4c11-98f7-bc88163e7475.png)
 
   但是如果此时我们把Class B修改成如下写法：
 
@@ -494,7 +498,7 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
   %>
   ```
 
-   ![](/img/aiWebshell/841bfb49-b093-4eb7-9559-e19053e59571.png) ![](https://prod-files-secure.s3.us-west-2.amazonaws.com/a116b209-23ed-47e3-b176-d57fece98279/32b2d52f-f70e-452a-be85-3f04093b6bc2/Untitled.png)
+   ![](/img/aiWebshell/841bfb49-b093-4eb7-9559-e19053e59571.png)
 
   一切出现字符串的地方都可以用request.getParameter代替。因此request.getParameter()的参数也可以递归放入request.getParameter()，并且最终也可以不使用硬编码的字符串，而是在系统中寻找一些字符串作为参数，加强混淆效果，例如：
 
@@ -540,7 +544,7 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
 
 GPT-4回答如下：
 
- ![](/img/aiWebshell/3a33dd29-67ba-4bbf-b240-069146639e49.png) ![](https://prod-files-secure.s3.us-west-2.amazonaws.com/a116b209-23ed-47e3-b176-d57fece98279/3f24a588-72fe-4551-bce1-31af6c46ed78/Untitled.png)
+ ![](/img/aiWebshell/3a33dd29-67ba-4bbf-b240-069146639e49.png)
 
 它很轻松的识别出样本中使用的JniInitiator类可以用来执行任意命令，在识别到样本可以进行这种行为模式后，判断样本为True。
 
@@ -568,7 +572,7 @@ GPT-4回答如下：
 
 GPT4的回答如下：
 
- ![](/img/aiWebshell/b5203c32-5ed7-48c9-878e-1bf666ace622.png) ![](https://prod-files-secure.s3.us-west-2.amazonaws.com/a116b209-23ed-47e3-b176-d57fece98279/fcd2fd7b-de46-4eb6-92aa-0a0252ec8214/Untitled.png)
+ ![](/img/aiWebshell/b5203c32-5ed7-48c9-878e-1bf666ace622.png) 
 
 GPT-4察觉到了我这里定义了一个a类并重写了两个方法是为了绕过安全检查。但是它一顿分析，最后判断存在风险的点是”存在动态执行数据库操作的可能“，显然是错误的。这里存在两个错误：
 
@@ -607,7 +611,7 @@ ${""[param.a]()[param.b](param.c)[param.d]()[param.e](param.f)[param.g](param.h)
 
 GPT-4给出分析如下：
 
- ![](/img/aiWebshell/bdf7bd1a-0a64-4415-8983-37ace173f395.png) ![](https://prod-files-secure.s3.us-west-2.amazonaws.com/a116b209-23ed-47e3-b176-d57fece98279/5a1aeedb-1cd8-447b-a218-0115e0f04097/Untitled.png)
+ ![](/img/aiWebshell/bdf7bd1a-0a64-4415-8983-37ace173f395.png)
 
 它并没有详细的给出攻击者如何/利用哪些类/如何构建利用链来进行代码/命令执行，而是按如下步骤进行分析：
 
@@ -660,17 +664,18 @@ GPT-4给出分析如下：
 
    在GPT4中进行模拟测试，发现可以成功篡改目标的返回。
 
-    ![](/img/aiWebshell/2f857406-dc5e-4739-931e-7ecb7e4e3609.png) ![](https://prod-files-secure.s3.us-west-2.amazonaws.com/a116b209-23ed-47e3-b176-d57fece98279/ca8bc905-b61c-4710-9817-50c419dc354e/Untitled.png)
+    ![](/img/aiWebshell/2f857406-dc5e-4739-931e-7ecb7e4e3609.png) 
+
 2. 攻击面绕过
 
    大模型的知识库虽然丰富，但也存在一些弊端：
    * 针对无法联网运行的大模型，它的知识库具备时效性。对于晚于它知识库构建时间被公开的攻击面，可能就无法做到很好的检测效果。可以考虑使用的点例如，新公开的0/1day漏洞、新公开的执行命令方法、攻击面等。
-   * 另检测引擎的知识库来自于其训练集，如果目标的训练集中不包含该攻击面的知识，则会降低检测的效果。例如GPT-4来自美国，对于只在中国流行或者研究比较多的攻击面，可能训练集包含的内容就相对会少一些，从而导致这种类型的攻击面会失效。
-
-     \
+   * 检测引擎的知识库来自于其训练集，如果目标的训练集中不包含该攻击面的知识，则会降低检测的效果。例如GPT-4来自美国，对于只在中国流行或者研究比较多的攻击面，可能训练集包含的内容就相对会少一些，从而导致这种类型的攻击面会失效。
 
    因此可以针对性的寻找模型的”知识盲区“进行绕过。以GPT举例如下：
-   * 通过测试发现，GPT无论是知识截止时间是2022年1月的GPT-3.5，还是2021年9月的GPT-4，甚至2023年4月的GPT-4-Turbo，都对H2 JDBC 连接串的漏洞了解不多，事实上，H2 JDBC连接串的`INIT`参数是可以执行任意代码的，下面是关于问题：
+   
+   
+   通过测试发现，GPT无论是知识截止时间是2022年1月的GPT-3.5，还是2021年9月的GPT-4，甚至2023年4月的GPT-4-Turbo，都对H2 JDBC 连接串的漏洞了解不多，事实上，H2 JDBC连接串的`INIT`参数是可以执行任意代码的，下面是关于问题：
 
      ```python
      H2数据库的java JDBC的sql连接字符串中有什么参数会导致代码运行吗
@@ -679,13 +684,14 @@ GPT-4给出分析如下：
      的几个模型的回答：
      * GPT-3.5
 
-        ![](/img/aiWebshell/bd2b9ef5-2213-42d7-8c41-f5ee7990f2b5.png) ![](https://prod-files-secure.s3.us-west-2.amazonaws.com/a116b209-23ed-47e3-b176-d57fece98279/5e4359ca-8c2b-4e0e-be8c-93637eed8fb3/Untitled.png)
+        ![](/img/aiWebshell/bd2b9ef5-2213-42d7-8c41-f5ee7990f2b5.png)
      * GPT-4
 
-        ![](/img/aiWebshell/825c8592-e7d8-4063-8ffa-068af3ea50bd.png) ![](https://prod-files-secure.s3.us-west-2.amazonaws.com/a116b209-23ed-47e3-b176-d57fece98279/5596e9e4-d56f-4e81-ab53-5f721734550e/Untitled.png)
+        ![](/img/aiWebshell/825c8592-e7d8-4063-8ffa-068af3ea50bd.png)
+
      * GPT-4-Turbo
 
-        ![](/img/aiWebshell/a95f6cae-c6a4-4d7f-b3c0-11da97978c72.png) ![](https://prod-files-secure.s3.us-west-2.amazonaws.com/a116b209-23ed-47e3-b176-d57fece98279/cf0a0dfc-5aee-47db-9863-bccae276efc8/Untitled.png)
+        ![](/img/aiWebshell/a95f6cae-c6a4-4d7f-b3c0-11da97978c72.png)
 
      可以看到随着模型的进步，程序给出的信息会更加的全面和详细。但就关键指标来说，虽然GPT-4的两个模型列出了INIT参数，但它们均只认为该参数可以执行SQL脚本，并未给出可以执行任意Java代码的提示。因此如果一个环境中存在H2 JDBC依赖，就可以尝试使用相关的WebShell进行绕过，样本如下：
 
@@ -699,9 +705,10 @@ GPT-4给出分析如下：
 
      GPT-4给出的回答如下：
 
-      ![](/img/aiWebshell/3f83132d-2258-4ee5-9023-d8e782702ad8.png) ![](https://prod-files-secure.s3.us-west-2.amazonaws.com/a116b209-23ed-47e3-b176-d57fece98279/292809d8-6153-4c2b-9457-d5ba043a2992/Untitled.png)
+      ![](/img/aiWebshell/3f83132d-2258-4ee5-9023-d8e782702ad8.png)
 
      可以看出GPT很纠结，它不认为这个样本可以直接执行任意代码，但它认为这个样本可以连接数据库，进行SQL注入之类的操作，并根据对WebShell的定义不同，给出了两个截然相反的结论。而从我们的经验可知，这个结论无疑是错误的，原因就是模型的知识库并没有覆盖到这种攻击面。
+     
 3. 模型支持的请求大小绕过
 
    由于大模型需要对请求的语句进行逐个加载和分析，因此对请求的长度大多会有限制。同时在WebShell检测这种对并发性和实时性有一定要求的场景，更是会限制长度，提高效率。那么构造一个冗长、包含大量无效数据的WebShell就可以突破目标模型的检测能力，达到绕过检测的效果。 例如我构建了一个文本大小为2M的WebShell，发送给GPT-3.5进行检测，GPT会直接卡住，无法给出结果。
