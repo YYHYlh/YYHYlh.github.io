@@ -297,7 +297,7 @@ public long process(SSIMediator ssiMediator, String commandName, String[] paramN
 
 SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()的调用。对于动态引擎来说，很容易发现该问题。因此如下面介绍几种可行的方法。
 
-* 使用随机数
+#### 使用随机数
 
 ```java
 <%    
@@ -314,7 +314,7 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
 
 如果引擎会在沙箱运行程序，则由于Random的随机性，可能会进入else分支，从而检测不到恶意代码被运行，模拟运行也可能会因为无法判断两个nextInt()对象会相同从而检测不到。而我们把random的范围设置的小一点，则在实际运行时，可以保证有一个较高的概率，在我们运行代码时程序被运行。事实上这里的nextInt参数也可以动态传入，进一步区分引擎运行和我们人工运行的概率区别。
 
-* 利用异常捕获
+#### 利用异常捕获
 
 利用动态沙箱引擎无法准确判断并模拟用户的输入内容，进行绕过。
 ```java
@@ -339,7 +339,7 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
 
 可以利用Java的语言特性误导引擎对方法调用的识别
 
-- 利用方法“重载”
+#### 利用方法“重载”
 
 首先提出一个问题。在java中，一个类如果长这样：
 
@@ -413,7 +413,7 @@ new B().print("test");
 
 对于检测引擎来说，样本运行的是两个空的setDataSourceName和setAutoCommit方法。但实际上程序执行的还是JdbcRowSetImpl的方法，导致了绕过。
 
-- 利用Java类的多态误导引擎识别对象类型
+#### 利用Java类的多态误导引擎识别对象类型
 
 如果存在如下接口：
 
@@ -462,7 +462,7 @@ class B extends JdbcRowSetImpl implements A{
 %>
 ```
 
-- 隐式方法调用
+#### 隐式方法调用
 
 java中存在一些语法糖，如果引擎未能对这类模式进行识别，则也可以产生绕过。
 
@@ -479,7 +479,7 @@ throw new NullPointerException(new a()+"");
 
 对对象进行字符串拼接时，会隐式的调用其`toString`方法。类似还有`hashCode`之类的方法。
 
-- 隐藏污点传播
+#### 隐藏污点传播
 
 单是上面几类绕过，更多的是阻断引擎发现我们的意图是在执行危险的sink，在很多时候还是无法绕过真实的检测引擎。有一个重要原因是source点往往会或多或少的暴露我们的真实意图。拿上面这个样本来说：
 
