@@ -141,7 +141,7 @@ launch(Map<String, ? extends Connector.Argument> arguments)
 
 在实际的WebShell绕过比赛中，这个样本也会被拦截。如何根据现有的成果完成绕过呢？此时我们已经找到了一个com.sun.tools.jdi.SunCommandLineLauncher类，其public的launch方法可以执行命令，既然它是public的类，存在public构造方法，并且存在public的launch，那它就很有可能在其他的类库中被调用。我们将它作为新的sink点进行搜索，但是直接搜会发现搜不到调用链，这也符合我们在第一步在搜索Runtime.getRuntime().exec()的结果，因为如果能搜到，那么我们在第一步的Tabby搜索时就应该可以找到相应的链。观察SunCommandLineLauncher类，发现它的launch方法实际上是实现的`com.sun.jdi.connect.LaunchingConnector`接口的`launch` 方法：
 
- ![](/img/aiWebshell/d8c9c76a-6d47-4526-a72d-6835287c8e7e.png) ![](https://prod-files-secure.s3.us-west-2.amazonaws.com/a116b209-23ed-47e3-b176-d57fece98279/90390049-fb86-4a22-83bf-ef5325723944/Untitled.png)
+![](/img/aiWebshell/d8c9c76a-6d47-4526-a72d-6835287c8e7e.png)
 
 ```java
 public interface LaunchingConnector extends Connector {
@@ -315,6 +315,7 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
     如果引擎会在沙箱运行程序，则由于Random的随机性，可能会进入else分支，从而检测不到恶意代码被运行，模拟运行也可能会因为无法判断两个nextInt()对象会相同从而检测不到。而我们把random的范围设置的小一点，则在实际运行时，可以保证有一个较高的概率，在我们运行代码时程序被运行。事实上这里的nextInt参数也可以动态传入，进一步区分引擎运行和我们人工运行的概率区别。
 
 * 利用异常捕获
+
 
     利用动态沙箱引擎无法准确判断并模拟用户的输入内容，进行绕过。
 
