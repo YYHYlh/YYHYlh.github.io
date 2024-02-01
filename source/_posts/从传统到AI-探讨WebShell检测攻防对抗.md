@@ -153,7 +153,7 @@ public interface LaunchingConnector extends Connector {
 
 用tabby搜索，发现可以搜索出两条路径
 
- ![](/img/aiWebshell/da6ce2bc-4cf2-4054-96ac-a43ad5d45e03.png)
+![](/img/aiWebshell/da6ce2bc-4cf2-4054-96ac-a43ad5d45e03.png)
 
 * com.sun.tools.example.debug.tty.VMConnection：这是一个内部类
 * jdk.jshell.execution.JdiInitiator：public类，并且其launch调用是在public构造方法中进行的
