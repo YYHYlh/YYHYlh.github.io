@@ -341,15 +341,15 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
 
 可以利用Java的语言特性误导引擎对方法调用的识别
 
-* 利用方法”重载”
+* 利用方法“重载”
 
     首先提出一个问题。在java中，一个类如果长这样：
 
     ```java
     Class B {
-    public Object print(Object str){
-        System.out.println("B"+str);
-    }
+        public Object print(Object str){
+            System.out.println("B"+str);
+        }
     }
 
     new B().print("test");
@@ -359,15 +359,15 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
 
     ```java
     Class A {
-    public Object print(String str){
-        System.out.println("A"+str);
-    }
+        public Object print(String str){
+            System.out.println("A"+str);
+        }
     }
 
     Class B extend A {
-    public Object print(Object str){
-        System.out.println("B"+str);
-    }
+        public Object print(Object str){
+            System.out.println("B"+str);
+        }
     }
     new B().print("test");
     ```
@@ -376,15 +376,15 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
 
     ```java
     Class A {
-    public Object print(Object str){
-        System.out.println("A"+str);
-    }
+        public Object print(Object str){
+            System.out.println("A"+str);
+        }
     }
 
     Class B extend A {
-    public Object print(String str){
-        System.out.println("B"+str);
-    }
+        public Object print(String str){
+            System.out.println("B"+str);
+        }
     }
     new B().print("test");
     ```
