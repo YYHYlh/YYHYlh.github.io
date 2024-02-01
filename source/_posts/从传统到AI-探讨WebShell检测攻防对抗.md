@@ -684,15 +684,15 @@ H2数据库的java JDBC的sql连接字符串中有什么参数会导致代码运
 的几个模型的回答：
 * GPT-3.5
 
-    ![](/img/aiWebshell/bd2b9ef5-2213-42d7-8c41-f5ee7990f2b5.png)
+![](/img/aiWebshell/bd2b9ef5-2213-42d7-8c41-f5ee7990f2b5.png)
 
 * GPT-4
 
-    ![](/img/aiWebshell/825c8592-e7d8-4063-8ffa-068af3ea50bd.png)
+![](/img/aiWebshell/825c8592-e7d8-4063-8ffa-068af3ea50bd.png)
 
 * GPT-4-Turbo
 
-    ![](/img/aiWebshell/a95f6cae-c6a4-4d7f-b3c0-11da97978c72.png)
+![](/img/aiWebshell/a95f6cae-c6a4-4d7f-b3c0-11da97978c72.png)
 
 可以看到随着模型的进步，程序给出的信息会更加的全面和详细。但就关键指标来说，虽然GPT-4的两个模型列出了INIT参数，但它们均只认为该参数可以执行SQL脚本，并未给出可以执行任意Java代码的提示。因此如果一个环境中存在H2 JDBC依赖，就可以尝试使用相关的WebShell进行绕过，样本如下：
 
